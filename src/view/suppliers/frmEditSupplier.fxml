@@ -9,9 +9,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customers.FrmAddCustomerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.suppliers.FrmEditSupplierController">
    <top>
-      <Label text="Add New Customer" textAlignment="CENTER" textFill="#3300ff" BorderPane.alignment="CENTER">
+      <Label text="Edit Supplier" textAlignment="CENTER" textFill="#3300ff" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="34.0" />
          </font>
@@ -37,7 +37,7 @@
             <Insets top="10.0" />
          </BorderPane.margin>
          <children>
-            <Label text="Custoer ID :" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <Label text="Supplier ID :" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
