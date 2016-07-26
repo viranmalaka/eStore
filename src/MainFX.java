@@ -3,7 +3,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.UIControllCommon;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,11 +21,8 @@ public class MainFX extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
-        Parent root = fXMLLoader.load();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
+        
+        UIControllCommon.openFXMLWindow(this, "MainWindow.fxml");
     }
     
     

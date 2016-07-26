@@ -5,18 +5,23 @@
  */
 package view;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -56,15 +61,51 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-    }    
+    }
 
     @FXML
     private void btnAdd_onClick(ActionEvent event) {
+        switch (tabPane.getSelectionModel().getSelectedIndex()) {
+            case 0: //customers
+                UIControllCommon.openFXMLWindow(this, "customers/frmAddCustomer.fxml", Modality.APPLICATION_MODAL, false);
+
+                //refresh table
+                break;
+                
+                
+            case 1://suppliers
+                UIControllCommon.openFXMLWindow(this, "suppliers/frmAddSupplier.fxml", Modality.APPLICATION_MODAL, false);
+
+                break;
+            case 2:
+
+                break;
+            default:
+                throw new AssertionError();
+        }
 
     }
 
     @FXML
     private void btnEdit_onClick(ActionEvent event) {
+        switch (tabPane.getSelectionModel().getSelectedIndex()) {
+            case 0: //customers
+                UIControllCommon.openFXMLWindow(this, "customers/frmEditCustomer.fxml", Modality.APPLICATION_MODAL, false);
+
+                //refresh table
+                break;
+                
+                
+            case 1://suppliers
+                UIControllCommon.openFXMLWindow(this, "suppliers/frmEditSupplier.fxml", Modality.APPLICATION_MODAL, false);
+
+                break;
+            case 2:
+
+                break;
+            default:
+                throw new AssertionError();
+        }
     }
 
     @FXML
@@ -82,5 +123,5 @@ public class MainWindowController implements Initializable {
     @FXML
     private void txtItmSearch_Action(ActionEvent event) {
     }
-    
+
 }
