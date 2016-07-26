@@ -38,6 +38,7 @@
          </BorderPane.margin>
          <children>
             <Label text="Customer ID :" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+
                <font>
                   <Font size="14.0" />
                </font>
