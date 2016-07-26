@@ -67,14 +67,16 @@ public class MainWindowController implements Initializable {
     private void btnAdd_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                UIControllCommon.openFXMLWindow(this, "customers/frmAddCustomer.fxml", Modality.APPLICATION_MODAL, false);
+                UIControllCommon.openFXMLWindow(this, "customers/frmAddCustomer.fxml", 
+                        Modality.APPLICATION_MODAL, false);
 
                 //refresh table
                 break;
                 
                 
             case 1://suppliers
-                UIControllCommon.openFXMLWindow(this, "suppliers/frmAddSupplier.fxml", Modality.APPLICATION_MODAL, false);
+                UIControllCommon.openFXMLWindow(this, "suppliers/frmAddSupplier.fxml", 
+                        Modality.APPLICATION_MODAL, false);
 
                 break;
             case 2:
@@ -90,14 +92,16 @@ public class MainWindowController implements Initializable {
     private void btnEdit_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                UIControllCommon.openFXMLWindow(this, "customers/frmEditCustomer.fxml", Modality.APPLICATION_MODAL, false);
+                UIControllCommon.openFXMLWindow(this, "customers/frmEditCustomer.fxml", 
+                        Modality.APPLICATION_MODAL, false);
 
                 //refresh table
                 break;
                 
                 
             case 1://suppliers
-                UIControllCommon.openFXMLWindow(this, "suppliers/frmEditSupplier.fxml", Modality.APPLICATION_MODAL, false);
+                UIControllCommon.openFXMLWindow(this, "suppliers/frmEditSupplier.fxml", 
+                        Modality.APPLICATION_MODAL, false);
 
                 break;
             case 2:

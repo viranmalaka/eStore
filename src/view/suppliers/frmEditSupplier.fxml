@@ -62,7 +62,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="txtCusID" editable="false" prefHeight="25.0" prefWidth="91.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
+            <TextField fx:id="txtSupID" editable="false" prefHeight="25.0" prefWidth="91.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
                <font>
                   <Font size="14.0" />
                </font>
@@ -70,7 +70,7 @@
                   <Insets bottom="2.0" left="5.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="txtCusFName" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="txtSupFName" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
                </font>
@@ -78,7 +78,7 @@
                   <Insets bottom="2.0" left="5.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="txtCusLName" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="txtSupLName" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="14.0" />
                </font>
@@ -86,7 +86,7 @@
                   <Insets bottom="2.0" left="5.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="txtCusTelephone" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="txtSupTelephone" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font size="14.0" />
                </font>
@@ -94,7 +94,7 @@
                   <Insets bottom="2.0" left="5.0" top="2.0" />
                </GridPane.margin>
             </TextField>
-            <TextArea fx:id="txtCusAddress" prefHeight="98.0" prefWidth="313.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <TextArea fx:id="txtSupAddress" prefHeight="98.0" prefWidth="313.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>

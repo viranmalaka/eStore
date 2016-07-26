@@ -26,15 +26,15 @@ public class FrmEditSupplierController implements Initializable {
     @FXML
     private Button btnClose;
     @FXML
-    private TextField txtCusID;
+    private TextField txtSupID;
     @FXML
-    private TextField txtCusFName;
+    private TextField txtSupFName;
     @FXML
-    private TextField txtCusLName;
+    private TextField txtSupLName;
     @FXML
-    private TextField txtCusTelephone;
+    private TextField txtSupTelephone;
     @FXML
-    private TextArea txtCusAddress;
+    private TextArea txtSupAddress;
 
     /**
      * Initializes the controller class.

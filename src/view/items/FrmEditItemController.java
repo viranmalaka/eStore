@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.suppliers;
+package view.items;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -11,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
 /**
@@ -19,22 +19,18 @@ import javafx.scene.control.TextField;
  *
  * @author Malaka
  */
-public class FrmAddSupplierController implements Initializable {
+public class FrmEditItemController implements Initializable {
 
     @FXML
     private Button btnSave;
     @FXML
     private Button btnClose;
     @FXML
-    private TextField txtSupID;
+    private TextField txtItmID;
     @FXML
-    private TextField txtSupFName;
+    private TextField txtItmName;
     @FXML
-    private TextField txtSupLName;
-    @FXML
-    private TextField txtSupTelephone;
-    @FXML
-    private TextArea txtSupAddress;
+    private ChoiceBox<?> cmbItmUnit;
 
     /**
      * Initializes the controller class.
