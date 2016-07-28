@@ -39,6 +39,8 @@ public class FrmCustomerController implements Initializable {
     @FXML
     private Label lblTitle;
 
+    
+    private boolean forEdit;
     /**
      * Initializes the controller class.
      */
@@ -48,6 +50,8 @@ public class FrmCustomerController implements Initializable {
     }    
 
     public void initData(boolean edit){
+        forEdit = edit;
+        
         if (edit) {
             lblTitle.setText("Edit Customer");
         } else {
