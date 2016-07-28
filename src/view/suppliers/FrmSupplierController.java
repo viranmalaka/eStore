@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -19,7 +20,7 @@ import javafx.scene.control.TextField;
  *
  * @author Malaka
  */
-public class FrmAddSupplierController implements Initializable {
+public class FrmSupplierController implements Initializable {
 
     @FXML
     private Button btnSave;
@@ -35,6 +36,8 @@ public class FrmAddSupplierController implements Initializable {
     private TextField txtSupTelephone;
     @FXML
     private TextArea txtSupAddress;
+    @FXML
+    private Label lblTitle;
 
     /**
      * Initializes the controller class.
