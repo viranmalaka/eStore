@@ -46,6 +46,14 @@ public class FrmSupplierController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    public void initData(boolean edit){
+        if (edit) {
+            lblTitle.setText("Edit Supplier");
+        } else {
+            lblTitle.setText("Add New Supplier");
+        }
+    }
 
     @FXML
     private void btnSave_onAction(ActionEvent event) {

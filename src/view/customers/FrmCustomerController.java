@@ -47,6 +47,14 @@ public class FrmCustomerController implements Initializable {
         // TODO
     }    
 
+    public void initData(boolean edit){
+        if (edit) {
+            lblTitle.setText("Edit Customer");
+        } else {
+            lblTitle.setText("Add New Customer");
+        }
+    }
+    
     @FXML
     private void btnSave_onAction(ActionEvent event) {
     }

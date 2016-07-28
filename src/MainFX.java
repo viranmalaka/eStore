@@ -1,5 +1,6 @@
 
 import javafx.application.Application;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.UIControllCommon;
 
@@ -18,7 +19,7 @@ public class MainFX extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         
-        UIControllCommon.openFXMLWindow(this, "MainWindow.fxml");
+        UIControllCommon.getInstance().openFXMLWindow("MainWindow.fxml", Modality.NONE, true);
 
     }
     

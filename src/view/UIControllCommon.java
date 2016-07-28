@@ -17,28 +17,40 @@ import javafx.stage.Stage;
  * @author Malaka
  * 
  * here there are some common things 
+ * this is singleton class
  */
 public class UIControllCommon {
-    private static Object o;
-    public static void openFXMLWindow(Object x, String path, Modality m, boolean resize){
+    private static UIControllCommon instance;
+    
+    private UIControllCommon() {
+    }
+    
+    public static UIControllCommon getInstance(){
+        if (instance == null) {
+            instance = new UIControllCommon();
+        }
+        return  instance;
+    }
+    
+    public Object openFXMLWindow (String path, Modality m, boolean resize){
         try {
-            FXMLLoader fXMLLoader = new FXMLLoader(x.getClass().getResource("/view/" + path));
+            FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/" + path));
             Parent root = fXMLLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setResizable(resize);
             stage.initModality(m);
             stage.show();
+            
+            return fXMLLoader.getController();
         } catch (IOException iOException) {
             //log
             iOException.printStackTrace();
         }
+        return null;
     }
-    
-    public static void openFXMLWindow(Object x, String path){
-        openFXMLWindow(x, path, Modality.NONE, true);
-    }
-    
-    
-    
+ 
+    //public Object openFXMLWindow(Object x, String path){
+    //    return openFXMLWindow(path, Modality.NONE, false);
+    //}
 }

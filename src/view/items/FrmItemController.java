@@ -42,6 +42,14 @@ public class FrmItemController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    public void initData(boolean  edit){
+        if (edit) {
+            lblTitle.setText("Edit Item");
+        } else {
+            lblTitle.setText("Add New Item");
+        }
+    }
 
     @FXML
     private void btnSave_onAction(ActionEvent event) {
