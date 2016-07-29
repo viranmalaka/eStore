@@ -7,33 +7,43 @@ package controller;
 
 import hibernate.HibernateController;
 import hibernate.SessionManager;
-import java.util.List;
+import javafx.stage.Modality;
 import model.Customer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Projections;
-import org.hibernate.query.Query;
+import view.UIControllCommon;
+import view.customers.FrmCustomerController;
 
 /**
  *
  * @author Malaka
  */
 public class CustomersController {
-    
-    public static boolean saveCustomer(int id, String fName, String lName, String address, String telephone){
 
-        Customer customer = new Customer(id, fName, lName, telephone, address);
-        boolean saveObject = HibernateController.saveObject(customer);
-        return true;
+    public static boolean saveCustomer(String customerID, String fName, String lName, String address, String telephone) {
+        Customer customer = new Customer(customerID, fName, lName, telephone, address);
+        return HibernateController.saveObject(customer);
+    }
+
+    public static long getNextIndex() {
+        Session session = SessionManager.getInstance().getSession();
+        Criteria criteria = session.createCriteria(Customer.class);
+        Object maxID = criteria.setProjection(Projections.max("id")).uniqueResult();
+        if (maxID == null) {
+            return 1;
+        }
+        return Long.parseLong(maxID + "") + 1;
+    }
+
+    public static void openAddNewCustomerWindow() {
+        String newCustomerId = CommonControllers.convertIndex(getNextIndex(), 'C');
+        ((FrmCustomerController) UIControllCommon.getInstance().
+                openFXMLWindow("customers/frmCustomer.fxml",
+                        Modality.APPLICATION_MODAL, false,"Add New Customer")).initData(newCustomerId);
     }
     
-    public static long getNextIndex(){
-        Session session = SessionManager.getInstance().getSession();
+    public static void openEditCustomerWindow(){
         
-        Criteria criteria = session.createCriteria( Customer.class);
-        Object maxID = criteria.setProjection(Projections.max("customerID")).uniqueResult();
-        
-        return Long.parseLong(maxID + "") + 1;
     }
 }

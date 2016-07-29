@@ -19,7 +19,7 @@ public class MainFX extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         
-        UIControllCommon.getInstance().openFXMLWindow("MainWindow.fxml", Modality.NONE, true);
+        UIControllCommon.getInstance().openFXMLWindow("MainWindow.fxml", Modality.NONE, true,"eStore - CapricornSoft Corporation");
 
     }
     

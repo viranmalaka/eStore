@@ -23,16 +23,15 @@ public class CustomersControllerTest {
     @Test
     public void testSaveCustomer() {
         System.out.println("saveCustomer");
-        int id = 0;
-        String fName = "";
-        String lName = "";
-        String address = "";
-        String telephone = "";
-        boolean expResult = false;
-        boolean result = CustomersController.saveCustomer(id, fName, lName, address, telephone);
+        String customerID = "C001";
+        String fName = "test first name";
+        String lName = "test last name";
+        String address = "test address";
+        String telephone = "test tele";
+        boolean expResult = true;
+        boolean result = CustomersController.saveCustomer(customerID, fName, lName, address, telephone);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -41,8 +40,9 @@ public class CustomersControllerTest {
     @Test
     public void testGetNextIndex() {
         System.out.println("getNextIndex");
-        long expResult =6L;
+        long expResult =3L;
         long result = CustomersController.getNextIndex();
+        System.out.println(result);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
     }

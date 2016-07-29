@@ -5,11 +5,7 @@
  */
 package hibernate;
 
-import java.util.List;
-import model.Customer;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
 
 /**
  *

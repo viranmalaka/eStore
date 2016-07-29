@@ -32,7 +32,7 @@ public class UIControllCommon {
         return  instance;
     }
     
-    public Object openFXMLWindow (String path, Modality m, boolean resize){
+    public Object openFXMLWindow (String path, Modality m, boolean resize,String title){
         try {
             FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/" + path));
             Parent root = fXMLLoader.load();
@@ -40,7 +40,35 @@ public class UIControllCommon {
             stage.setScene(new Scene(root));
             stage.setResizable(resize);
             stage.initModality(m);
+            stage.setTitle(title);
             stage.show();
+            return fXMLLoader.getController();
+        } catch (IOException iOException) {
+            //log
+            iOException.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Object openFXMLWindow(String path, Modality m, boolean resize, String title, boolean wait,boolean centerScreen){
+        try {
+            FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/" + path));
+            Parent root = fXMLLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setResizable(resize);
+            stage.initModality(m);
+            stage.setTitle(title);
+            
+            if (centerScreen) {
+                stage.centerOnScreen();
+            }
+            
+            if (wait) {
+                stage.showAndWait();
+            }else{
+                stage.show();
+            }
             
             return fXMLLoader.getController();
         } catch (IOException iOException) {
@@ -49,8 +77,4 @@ public class UIControllCommon {
         }
         return null;
     }
- 
-    //public Object openFXMLWindow(Object x, String path){
-    //    return openFXMLWindow(path, Modality.NONE, false);
-    //}
-}
+ }

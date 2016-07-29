@@ -18,13 +18,15 @@ import javax.persistence.Id;
 @Entity
 public class Customer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int customerID;
+    private int id;
+    
+    private String customerID; // 'C' + [5*0]id
     private String firstName;
     private String lastName;
     private String telephone;
     private String address;
 
-    public Customer(int customerID, String firstName, String lastName, String telephone, String address) {
+    public Customer(String customerID, String firstName, String lastName, String telephone, String address) {
         this.customerID = customerID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,13 +40,13 @@ public class Customer {
      * @return the customerID
      */
     public String getCustomerID() {
-        return "C" + customerID;
+        return customerID;
     }
 
     /**
      * @param customerID the customerID to set
      */
-    public void setCustomerID(int customerID) {
+    public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 
@@ -103,6 +105,16 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
     
     
 }

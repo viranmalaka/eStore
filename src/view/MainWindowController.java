@@ -5,6 +5,8 @@
  */
 package view;
 
+import controller.CommonControllers;
+import controller.CustomersController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -65,22 +67,20 @@ public class MainWindowController implements Initializable {
     private void btnAdd_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                ((FrmCustomerController) UIControllCommon.getInstance().
-                        openFXMLWindow("customers/frmCustomer.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(false);
+                CustomersController.openAddNewCustomerWindow();
                 //refresh table
                 break;
 
             case 1://suppliers
                 ((FrmSupplierController) UIControllCommon.getInstance().
                         openFXMLWindow("suppliers/frmSupplier.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(false);
+                                Modality.APPLICATION_MODAL, false,"")).initData(false);
                 break;
                 
             case 2:
                 ((FrmItemController) UIControllCommon.getInstance().
                         openFXMLWindow("items/frmItem.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(false);
+                                Modality.APPLICATION_MODAL, false,"")).initData(false);
                 break;
             default:
                 throw new AssertionError();
@@ -92,9 +92,9 @@ public class MainWindowController implements Initializable {
     private void btnEdit_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                ((FrmCustomerController) UIControllCommon.getInstance().
-                        openFXMLWindow("customers/frmCustomer.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(true);
+                /*((FrmCustomerController) UIControllCommon.getInstance().
+                openFXMLWindow("customers/frmCustomer.fxml",
+                Modality.APPLICATION_MODAL, false)).initData(true);*/
 
                 //refresh table
                 break;
@@ -102,13 +102,13 @@ public class MainWindowController implements Initializable {
             case 1://suppliers
                 ((FrmSupplierController) UIControllCommon.getInstance().
                         openFXMLWindow("suppliers/frmSupplier.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(true);
+                                Modality.APPLICATION_MODAL, false,"")).initData(true);
 
                 break;
             case 2:
                 ((FrmItemController) UIControllCommon.getInstance().
                         openFXMLWindow("items/frmItem.fxml",
-                                Modality.APPLICATION_MODAL, false)).initData(true);
+                                Modality.APPLICATION_MODAL, false,"")).initData(true);
                 break;
             default:
                 throw new AssertionError();

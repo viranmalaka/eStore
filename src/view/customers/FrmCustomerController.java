@@ -5,6 +5,7 @@
  */
 package view.customers;
 
+import controller.CommonControllers;
 import controller.CustomersController;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,41 +41,46 @@ public class FrmCustomerController implements Initializable {
     @FXML
     private Label lblTitle;
 
-    
     private boolean forEdit;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    public void initData(boolean edit){
-        forEdit = edit;
-        
-        if (edit) {
-            lblTitle.setText("Edit Customer");
-        } else {
-            lblTitle.setText("Add New Customer");
-            
-            //txtCusID.setText(CustomersController.getNextIndex());
-        }
     }
-    
+
+    public void initData(String newCustomerID) { // for new customer
+        lblTitle.setText("Add New Customer");
+        txtCusID.setText(newCustomerID);
+        forEdit = false;
+    }
+
+    public void initData(String customerID, String fName, String lName, String telephone, String address) {
+        // for edit the customer
+        lblTitle.setText("Edit Customer");
+        txtCusID.setText(customerID);
+        txtCusFName.setText(fName);
+        txtCusLName.setText(lName);
+        txtCusTelephone.setText(telephone);
+        txtCusAddress.setText(address);
+        forEdit = true;
+    }
+
     @FXML
     private void btnSave_onAction(ActionEvent event) {
-            CustomersController.saveCustomer(Integer.parseInt(txtCusID.getText().substring(1)),
-                    txtCusFName.getText(),
-                    txtCusLName.getText(),
-                    txtCusAddress.getText(),
-                    txtCusTelephone.getText());
-            //log
-            //alert
+        CustomersController.saveCustomer(txtCusID.getText(),
+                txtCusFName.getText(),
+                txtCusLName.getText(),
+                txtCusAddress.getText(),
+                txtCusTelephone.getText());
+        //log
+        //alert
     }
 
     @FXML
     private void btnClose_onClose(ActionEvent event) {
     }
-    
+
 }
