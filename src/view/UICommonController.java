@@ -6,33 +6,37 @@
 package view;
 
 import java.io.IOException;
+import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
  *
  * @author Malaka
- * 
- * here there are some common things 
- * this is singleton class
+ *
+ * here there are some common things this is singleton class
  */
-public class UIControllCommon {
-    private static UIControllCommon instance;
-    
-    private UIControllCommon() {
+public class UICommonController {
+
+    private static UICommonController instance;
+
+    private UICommonController() {
     }
-    
-    public static UIControllCommon getInstance(){
+
+    public static UICommonController getInstance() {
         if (instance == null) {
-            instance = new UIControllCommon();
+            instance = new UICommonController();
         }
-        return  instance;
+        return instance;
     }
-    
-    public Object openFXMLWindow (String path, Modality m, boolean resize,String title){
+
+    public Object openFXMLWindow(String path, Modality m, boolean resize, String title) {
         try {
             FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/" + path));
             Parent root = fXMLLoader.load();
@@ -49,8 +53,8 @@ public class UIControllCommon {
         }
         return null;
     }
-    
-    public Object openFXMLWindow(String path, Modality m, boolean resize, String title, boolean wait,boolean centerScreen){
+
+    public Object openFXMLWindow(String path, Modality m, boolean resize, String title, boolean wait, boolean centerScreen) {
         try {
             FXMLLoader fXMLLoader = new FXMLLoader(getClass().getResource("/view/" + path));
             Parent root = fXMLLoader.load();
@@ -59,17 +63,17 @@ public class UIControllCommon {
             stage.setResizable(resize);
             stage.initModality(m);
             stage.setTitle(title);
-            
+
             if (centerScreen) {
                 stage.centerOnScreen();
             }
-            
+
             if (wait) {
                 stage.showAndWait();
-            }else{
+            } else {
                 stage.show();
             }
-            
+
             return fXMLLoader.getController();
         } catch (IOException iOException) {
             //log
@@ -77,4 +81,24 @@ public class UIControllCommon {
         }
         return null;
     }
- }
+
+    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title, String hedder) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(hedder);
+        alert.setContentText(msg);
+        return alert.showAndWait();
+    }
+    
+    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title){
+        return showAlertBox(type, msg, title, null);
+    }
+    
+    public static interface CommonMessages{
+        String EMPTY_FIELDS = "Following fields should not be empty";
+    }
+    
+    public static interface CommonTitles{
+        String VALIDATING_ERROR = "Validating Error";
+    }
+}

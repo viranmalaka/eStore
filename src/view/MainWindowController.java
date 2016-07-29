@@ -72,13 +72,13 @@ public class MainWindowController implements Initializable {
                 break;
 
             case 1://suppliers
-                ((FrmSupplierController) UIControllCommon.getInstance().
+                ((FrmSupplierController) UICommonController.getInstance().
                         openFXMLWindow("suppliers/frmSupplier.fxml",
                                 Modality.APPLICATION_MODAL, false,"")).initData(false);
                 break;
                 
             case 2:
-                ((FrmItemController) UIControllCommon.getInstance().
+                ((FrmItemController) UICommonController.getInstance().
                         openFXMLWindow("items/frmItem.fxml",
                                 Modality.APPLICATION_MODAL, false,"")).initData(false);
                 break;
@@ -92,7 +92,7 @@ public class MainWindowController implements Initializable {
     private void btnEdit_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                /*((FrmCustomerController) UIControllCommon.getInstance().
+                /*((FrmCustomerController) UICommonController.getInstance().
                 openFXMLWindow("customers/frmCustomer.fxml",
                 Modality.APPLICATION_MODAL, false)).initData(true);*/
 
@@ -100,13 +100,13 @@ public class MainWindowController implements Initializable {
                 break;
 
             case 1://suppliers
-                ((FrmSupplierController) UIControllCommon.getInstance().
+                ((FrmSupplierController) UICommonController.getInstance().
                         openFXMLWindow("suppliers/frmSupplier.fxml",
                                 Modality.APPLICATION_MODAL, false,"")).initData(true);
 
                 break;
             case 2:
-                ((FrmItemController) UIControllCommon.getInstance().
+                ((FrmItemController) UICommonController.getInstance().
                         openFXMLWindow("items/frmItem.fxml",
                                 Modality.APPLICATION_MODAL, false,"")).initData(true);
                 break;

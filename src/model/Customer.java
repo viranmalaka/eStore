@@ -5,6 +5,7 @@
  */
 package model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class Customer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
+    @Column(length = 7,nullable = false,unique = true,updatable = false)
     private String customerID; // 'C' + [5*0]id
     private String firstName;
     private String lastName;

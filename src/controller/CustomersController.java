@@ -13,7 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import view.UIControllCommon;
+import view.UICommonController;
 import view.customers.FrmCustomerController;
 
 /**
@@ -42,7 +42,7 @@ public class CustomersController {
 
     public static void openAddNewCustomerWindow() {
         String newCustomerId = CommonControllers.convertIndex(getNextIndex(), 'C');
-        ((FrmCustomerController) UIControllCommon.getInstance().
+        ((FrmCustomerController) UICommonController.getInstance().
                 openFXMLWindow("customers/frmCustomer.fxml",
                         Modality.APPLICATION_MODAL, false,"Add New Customer")).initData(newCustomerId);
     }
