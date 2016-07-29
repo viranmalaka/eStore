@@ -16,11 +16,10 @@ import org.hibernate.cfg.Configuration;
 public class SessionManager {
 
     private static SessionManager instance;
-    private Session sessionObj;
+    private SessionFactory sessionFactory;
 
     private SessionManager() {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        sessionObj = sessionFactory.openSession();
+        sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
     public static SessionManager getInstance(){
@@ -34,8 +33,8 @@ public class SessionManager {
         return instance;
     }
 
-    public Session getSession() {
-        return sessionObj;
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
     
 }

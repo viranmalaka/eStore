@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -75,6 +76,7 @@ public class FrmCustomerController implements Initializable {
                 txtCusLName.getText(),
                 txtCusAddress.getText(),
                 txtCusTelephone.getText());
+        ((Stage)btnSave.getScene().getWindow()).close();
         //log
         //alert
     }

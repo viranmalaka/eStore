@@ -6,6 +6,7 @@
 package hibernate;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  *
@@ -14,7 +15,8 @@ import org.hibernate.Session;
 public class HibernateController {
     public static boolean saveObject(Object obj){
         try {
-            Session session = SessionManager.getInstance().getSession();
+            SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
+            Session session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(obj);
             session.getTransaction().commit();
