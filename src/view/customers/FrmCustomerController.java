@@ -128,18 +128,31 @@ public class FrmCustomerController implements Initializable {
                     break;
                 }
 
-                boolean saveCustomer = CustomersController.saveCustomer(txtCusID.getText(),
-                        txtCusFName.getText(),
-                        txtCusLName.getText(),
-                        txtCusAddress.getText(),
-                        txtCusTelephone.getText());
-                if (!saveCustomer) {
-                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Saved Successfully");
-                    LogController.log(Level.ERROR, "Customer Saving is not done.");
+                if (forEdit) {
+                    boolean updateCustomer = CustomersController.updateCustomer(cId, fname, lname, address, tp);
+                    if (!updateCustomer) {
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Updated Successfully");
+                        LogController.log(Level.ERROR, "Customer Updating is not done.");
+                    } else {
+                        UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Updated Successfully", "");
+                        ((Stage) btnSave.getScene().getWindow()).close();
+                        LogController.log(Level.INFO, "Customer Updated - " + cId);
+                    }
                 } else {
-                    UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Saved Successfully","");
-                    ((Stage) btnSave.getScene().getWindow()).close();
-                    LogController.log(Level.INFO, "New Customer Created - " + cId);
+                    // adding new customer
+                    boolean saveCustomer = CustomersController.saveCustomer(txtCusID.getText(),
+                            txtCusFName.getText(),
+                            txtCusLName.getText(),
+                            txtCusAddress.getText(),
+                            txtCusTelephone.getText());
+                    if (!saveCustomer) {
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Saved Successfully");
+                        LogController.log(Level.ERROR, "Customer Saving is not done.");
+                    } else {
+                        UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Saved Successfully", "");
+                        ((Stage) btnSave.getScene().getWindow()).close();
+                        LogController.log(Level.INFO, "New Customer Created - " + cId);
+                    }
                 }
         }
         //log

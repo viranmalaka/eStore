@@ -5,6 +5,12 @@
  */
 package controller;
 
+import hibernate.SessionManager;
+import model.Customer;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -46,5 +52,25 @@ public class CustomersControllerTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
     }
+
+    /**
+     * Test of updateCustomer method, of class CustomersController.
+     */
+    @Test
+    public void testUpdateCustomer() {
+        System.out.println("updateCustomer");
+        String customerID = "C00003";
+        String fName = "Kashuni";
+        String lName = "Tharika";
+        String address = "Nakkavita";
+        String telephone = "077-9944558";
+        boolean expResult = true;
+        boolean result = CustomersController.updateCustomer(customerID, fName, lName, address, telephone);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+    }
+
+
+
     
 }
