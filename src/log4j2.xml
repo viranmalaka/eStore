@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="Console">
+      <PatternLayout pattern="%-5level %logger - %msg%n"/>
+    </Console>
+    <File name="File">
+      <PatternLayout pattern="%d{yyyy MMM dd HH:mm:ss,SSS} [t=%t] %-5level %logger.%M(:%L) - %msg%n"/>
+      <fileName>log/eStore.log</fileName>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File" />
+    </Root>   
+    <Logger name="org.logging.learn.log4j" level="error" additivity="false">
+      <AppenderRef ref="File" />
+    </Logger>
+  </Loggers>
+</Configuration>

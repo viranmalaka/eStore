@@ -9,6 +9,7 @@ import hibernate.HibernateController;
 import hibernate.SessionManager;
 import java.util.List;
 import model.Customer;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Projections;
@@ -30,8 +31,9 @@ public class CustomersController {
     public static long getNextIndex(){
         Session session = SessionManager.getInstance().getSession();
         
-        return 0;
+        Criteria criteria = session.createCriteria( Customer.class);
+        Object maxID = criteria.setProjection(Projections.max("customerID")).uniqueResult();
         
-
+        return Long.parseLong(maxID + "") + 1;
     }
 }

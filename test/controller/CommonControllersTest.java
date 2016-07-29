@@ -28,7 +28,6 @@ public class CommonControllersTest {
         String expResult = "C00100";
         String result = CommonControllers.convertIndex(id, c);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
     
 }

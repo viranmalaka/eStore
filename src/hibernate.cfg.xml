@@ -31,6 +31,8 @@
 	    	do we want to print the executed sql queries?
 	    -->
 	    <property name="show_sql">true</property>
+            
+        
 	    
     <!-- path of the class that put @entity annotation -->
     <mapping class="model.Customer"/>

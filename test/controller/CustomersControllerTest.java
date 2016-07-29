@@ -41,11 +41,10 @@ public class CustomersControllerTest {
     @Test
     public void testGetNextIndex() {
         System.out.println("getNextIndex");
-        long expResult = 0L;
+        long expResult =6L;
         long result = CustomersController.getNextIndex();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }
