@@ -15,16 +15,20 @@ import javax.persistence.Id;
  *
  * @author Malaka
  */
-
 @Entity
 public class Customer {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
-    @Column(length = 7,nullable = false,unique = true,updatable = false)
+
+    @Column(length = 7, nullable = false, unique = true, updatable = false)
     private String customerID; // 'C' + [5*0]id
+    @Column(length = 100, nullable = false)
     private String firstName;
+    @Column(length = 100)
     private String lastName;
+    @Column(length = 12)
     private String telephone;
     private String address;
 
@@ -36,8 +40,6 @@ public class Customer {
         this.address = address;
     }
 
-    
-    
     /**
      * @return the customerID
      */
@@ -115,8 +117,5 @@ public class Customer {
     public void setId(int id) {
         this.id = id;
     }
-    
-    
-    
-    
+
 }
