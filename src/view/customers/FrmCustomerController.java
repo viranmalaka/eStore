@@ -5,6 +5,7 @@
  */
 package view.customers;
 
+import controller.CustomersController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -56,11 +57,20 @@ public class FrmCustomerController implements Initializable {
             lblTitle.setText("Edit Customer");
         } else {
             lblTitle.setText("Add New Customer");
+            
+            //txtCusID.setText(CustomersController.getNextIndex());
         }
     }
     
     @FXML
     private void btnSave_onAction(ActionEvent event) {
+            CustomersController.saveCustomer(Integer.parseInt(txtCusID.getText().substring(1)),
+                    txtCusFName.getText(),
+                    txtCusLName.getText(),
+                    txtCusAddress.getText(),
+                    txtCusTelephone.getText());
+            //log
+            //alert
     }
 
     @FXML

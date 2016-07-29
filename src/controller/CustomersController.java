@@ -5,10 +5,33 @@
  */
 package controller;
 
+import hibernate.HibernateController;
+import hibernate.SessionManager;
+import java.util.List;
+import model.Customer;
+import org.hibernate.Session;
+import org.hibernate.criterion.CriteriaQuery;
+import org.hibernate.criterion.Projections;
+import org.hibernate.query.Query;
+
 /**
  *
  * @author Malaka
  */
 public class CustomersController {
     
+    public static boolean saveCustomer(int id, String fName, String lName, String address, String telephone){
+
+        Customer customer = new Customer(id, fName, lName, telephone, address);
+        boolean saveObject = HibernateController.saveObject(customer);
+        return true;
+    }
+    
+    public static long getNextIndex(){
+        Session session = SessionManager.getInstance().getSession();
+        
+        return 0;
+        
+
+    }
 }
