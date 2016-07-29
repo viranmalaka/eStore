@@ -1,2 +1,5 @@
 2016 Jul 29 11:05:13,215 [t=main] INFO  logger.LogController.log(:20) - Test log for INFO
 2016 Jul 29 11:12:47,929 [t=main] INFO  logger.LogController.log(:33) - Test log for INFO 2
+2016 Jul 30 00:04:37,475 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.
+2016 Jul 30 00:08:41,453 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.
+2016 Jul 30 00:10:10,574 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.

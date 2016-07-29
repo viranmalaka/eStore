@@ -94,11 +94,13 @@ public class UICommonController {
         return showAlertBox(type, msg, title, null);
     }
     
-    public static interface CommonMessages{
+    public static interface CommonHeadding{
         String EMPTY_FIELDS = "Following fields should not be empty";
+        String INVALID_FORMATTINGS = "Following fields have invalid formattings";
     }
     
     public static interface CommonTitles{
         String VALIDATING_ERROR = "Validating Error";
+        String FORMATTING_ERROR = "Formatting Error";
     }
 }

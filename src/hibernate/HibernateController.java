@@ -5,6 +5,8 @@
  */
 package hibernate;
 
+import logger.LogController;
+import org.apache.logging.log4j.Level;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -23,6 +25,7 @@ public class HibernateController {
             session.close();
         } catch (Exception e) {
             // add log
+            LogController.log(Level.ERROR, e.toString());
             return false;
         }
         return true;

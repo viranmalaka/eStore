@@ -5,6 +5,7 @@
  */
 package view.customers;
 
+import controller.CommonControllers;
 import controller.CustomersController;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,6 +60,7 @@ public class FrmCustomerController implements Initializable {
         lblTitle.setText("Add New Customer");
         txtCusID.setText(newCustomerID);
         forEdit = false;
+
         LogController.log(Level.TRACE, "Open -> Add New Customer Window");
     }
 
@@ -76,34 +78,70 @@ public class FrmCustomerController implements Initializable {
 
     @FXML
     private void btnSave_onAction(ActionEvent event) {
+        String cId = txtCusID.getText();
+        String fname = txtCusFName.getText();
+        String lname = txtCusLName.getText();
+        String tp = txtCusTelephone.getText();
+        String address = txtCusAddress.getText();
+
         //validating 
-        switch (1) {case 1:
-            String emptyItems = "";
-            boolean hasEmpty = false;
-            if (txtCusFName.getText().equals("")) {
-                emptyItems += "First Name \n"; hasEmpty = true;
-            }
-            if (txtCusAddress.getText().equals("")) {
-                emptyItems += "Address \n"; hasEmpty = true;
-            }
-            if (hasEmpty) {
-                UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                        emptyItems,
-                        UICommonController.CommonTitles.VALIDATING_ERROR,
-                        UICommonController.CommonMessages.EMPTY_FIELDS);
-                break;
-            }
-            
-            
-            
+        switch (1) {
+            case 1:
+                String emptyItems = "";
+                boolean hasEmpty = false;
+                if (fname.equals("")) {
+                    emptyItems += "First Name \n";
+                    hasEmpty = true;
+                }
+                if (address.equals("")) {
+                    emptyItems += "Address \n";
+                    hasEmpty = true;
+                }
+                if (hasEmpty) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR,
+                            emptyItems,
+                            UICommonController.CommonTitles.VALIDATING_ERROR,
+                            UICommonController.CommonHeadding.EMPTY_FIELDS);
+                    break;
+                }
+
+                String errorFormatting = "";
+                boolean hasErrorFormatting = false;
+                if (!CommonControllers.isName(fname)) {
+                    errorFormatting += String.format("'%s' is not a name \n", fname);
+                    hasErrorFormatting = true;
+                }
+                if (!CommonControllers.isName(lname)) {
+                    errorFormatting += String.format("'%s' is not a name \n", lname);
+                    hasErrorFormatting = true;
+                }
+                if (!CommonControllers.isTelephoneNumber(tp)) {
+                    errorFormatting += String.format("'%s' is not a telephone number \n", tp);
+                    hasErrorFormatting = true;
+                }
+
+                if (hasErrorFormatting) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR,
+                            errorFormatting,
+                            UICommonController.CommonTitles.FORMATTING_ERROR,
+                            UICommonController.CommonHeadding.INVALID_FORMATTINGS);
+                    break;
+                }
+
+                boolean saveCustomer = CustomersController.saveCustomer(txtCusID.getText(),
+                        txtCusFName.getText(),
+                        txtCusLName.getText(),
+                        txtCusAddress.getText(),
+                        txtCusTelephone.getText());
+                if (!saveCustomer) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Saved Successfully");
+                    LogController.log(Level.ERROR, "Customer Saving is not done.");
+                } else {
+                    UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Saved Successfully","");
+                    ((Stage) btnSave.getScene().getWindow()).close();
+                    LogController.log(Level.INFO, "New Customer Created - " + cId);
+                }
         }
-        
-        CustomersController.saveCustomer(txtCusID.getText(),
-                txtCusFName.getText(),
-                txtCusLName.getText(),
-                txtCusAddress.getText(),
-                txtCusTelephone.getText());
-        ((Stage)btnSave.getScene().getWindow()).close();
         //log
         //alert
     }

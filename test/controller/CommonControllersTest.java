@@ -29,5 +29,31 @@ public class CommonControllersTest {
         String result = CommonControllers.convertIndex(id, c);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of isName method, of class CommonControllers.
+     */
+    @Test
+    public void testIsName() {
+        System.out.println("isName");
+        String name = "malaka dfgsdfg Mr.";
+        boolean expResult = true;
+        boolean result = CommonControllers.isName(name);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+    }
+
+    /**
+     * Test of isTelephoneNumber method, of class CommonControllers.
+     */
+    @Test
+    public void testIsTelephoneNumber() {
+        System.out.println("isTelephoneNumber");
+        String num = "923-1234506";
+        boolean expResult = true;
+        boolean result = CommonControllers.isTelephoneNumber(num);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+    }
     
 }
