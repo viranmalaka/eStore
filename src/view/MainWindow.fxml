@@ -15,7 +15,7 @@
    <center>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab onSelectionChanged="#txtCusSearch_onAction" text="Customers">
+          <Tab text="Customers">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
@@ -43,7 +43,7 @@
                                     <Insets right="5.0" />
                                  </padding>
                               </ChoiceBox>
-                              <TextField fx:id="txtCusSearch">
+                              <TextField fx:id="txtCusSearch" onAction="#txtCusSearch_onAction">
                                  <FlowPane.margin>
                                     <Insets left="5.0" />
                                  </FlowPane.margin>

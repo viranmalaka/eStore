@@ -16,9 +16,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 import view.customers.FrmCustomerController;
 import view.items.FrmItemController;
 import view.suppliers.FrmSupplierController;
@@ -131,4 +133,13 @@ public class MainWindowController implements Initializable {
     private void txtItmSearch_Action(ActionEvent event) {
     }
 
+    
+    private void refreshCustomer(){
+        
+    }
+    
+    private void tblCustomerAddItem(String id, String fname, String lname, String address, String tp){
+
+    }
+        
 }
