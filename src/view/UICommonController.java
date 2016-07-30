@@ -82,13 +82,21 @@ public class UICommonController {
         return null;
     }
 
-    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title, String hedder) {
+    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title, String hedder, ButtonType... elements) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(hedder);
+        if (elements != null) {
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(elements);
+        }
         alert.setContentText(msg);
         return alert.showAndWait();
     }
+    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title, String hedder){
+        return showAlertBox(type, msg, title, hedder, ButtonType.OK);
+    }
+        
     
     public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title){
         return showAlertBox(type, msg, title, null);
@@ -103,4 +111,5 @@ public class UICommonController {
         String VALIDATING_ERROR = "Validating Error";
         String FORMATTING_ERROR = "Formatting Error";
     }
+    
 }

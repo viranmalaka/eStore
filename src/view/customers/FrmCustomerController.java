@@ -8,12 +8,14 @@ package view.customers;
 import controller.CommonControllers;
 import controller.CustomersController;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -155,12 +157,18 @@ public class FrmCustomerController implements Initializable {
                     }
                 }
         }
-        //log
-        //alert
     }
 
     @FXML
     private void btnClose_onClose(ActionEvent event) {
+
+        Optional<ButtonType> showAlertBox = UICommonController.showAlertBox(Alert.AlertType.INFORMATION, 
+                "Are you sure ? you want to close.", 
+                "",null,
+                ButtonType.YES,ButtonType.NO);
+        if (showAlertBox.get() == ButtonType.YES) {
+            ((Stage) btnClose.getScene().getWindow()).close();
+        }
     }
 
 }

@@ -2,6 +2,7 @@
 import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.MainWindowController;
 import view.UICommonController;
 
 /*
@@ -17,9 +18,10 @@ public class MainFX extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        UICommonController.getInstance().openFXMLWindow("MainWindow.fxml", Modality.NONE, true, "eStore - CapricornSoft Corporation");
-
+        UICommonController.getInstance().openFXMLWindow("MainWindow.fxml", 
+                        Modality.NONE, true, 
+                        "eStore - CapricornSoft Corporation");
+        
     }
 
     public static void main(String[] args) {
