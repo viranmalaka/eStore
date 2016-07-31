@@ -142,11 +142,7 @@ public class FrmCustomerController implements Initializable {
                     }
                 } else {
                     // adding new customer
-                    boolean saveCustomer = CustomersController.saveCustomer(txtCusID.getText(),
-                            txtCusFName.getText(),
-                            txtCusLName.getText(),
-                            txtCusAddress.getText(),
-                            txtCusTelephone.getText());
+                    boolean saveCustomer = CustomersController.saveCustomer(cId, fname, lname, address, tp);
                     if (!saveCustomer) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Saved Successfully");
                         LogController.log(Level.ERROR, "Customer Saving is not done.");

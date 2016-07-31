@@ -7,6 +7,7 @@ package view;
 
 import controller.CommonControllers;
 import controller.CustomersController;
+import controller.SupplierController;
 import java.beans.EventHandler;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import view.suppliers.FrmSupplierController;
  */
 public class MainWindowController implements Initializable {
 
+//<editor-fold defaultstate="collapsed" desc="FXML Elements">
     @FXML
     private Button btnAdd;
     @FXML
@@ -56,11 +58,11 @@ public class MainWindowController implements Initializable {
     @FXML
     private TableView<PersonTableRow> tblCustomers;
     @FXML
-    private ChoiceBox<?> cmbSupSearchItem;
+    private ChoiceBox<String> cmbSupSearchItem;
     @FXML
     private TextField txtSupSearch;
     @FXML
-    private TableView<?> tblSuppliers;
+    private TableView<PersonTableRow> tblSuppliers;
     @FXML
     private ChoiceBox<?> cmbItmSearchItem;
     @FXML
@@ -77,9 +79,24 @@ public class MainWindowController implements Initializable {
     private TableColumn<PersonTableRow, String> cusTpColumn;
     @FXML
     private TableColumn<PersonTableRow, String> cusAddColumn;
+    @FXML
+    private TableColumn<PersonTableRow, String> supIdColumn;
+    @FXML
+    private TableColumn<PersonTableRow, String> supFnameColumn;
+    @FXML
+    private TableColumn<PersonTableRow, String> supLnameColumn;
+    @FXML
+    private TableColumn<PersonTableRow, String> supTpColumn;
+    @FXML
+    private TableColumn<PersonTableRow, String> supAddressColumn;
+//</editor-fold>
 
+    private int cmbSupSelectedIndex;
     private int cmbCusSelectedIndex;
     private ObservableList<PersonTableRow> cusData = FXCollections.observableArrayList();
+    private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
+    @FXML
+    private TableView<?> tblItems;
 
     /**
      * Initializes the controller class.
@@ -94,17 +111,27 @@ public class MainWindowController implements Initializable {
                 add("Address");
             }
         }));
-        cmbCusSearchItem.getSelectionModel().select(0);
-        cmbCusSearchItem.getSelectionModel().selectedIndexProperty().addListener(
-                new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                cmbCusSelectedIndex = newValue.intValue();
+        cmbSupSearchItem.setItems(FXCollections.observableList(new ArrayList<String>() {
+            {
+                add("Supplier ID");
+                add("Name");
+                add("TP number");
+                add("Address");
             }
-        }
-        );
-        initCustomerTable();
+        }));
 
+        cmbCusSearchItem.getSelectionModel().select(0);
+        cmbSupSearchItem.getSelectionModel().select(0);
+
+        cmbCusSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            cmbCusSelectedIndex = newValue.intValue();
+        });
+        cmbSupSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            cmbSupSelectedIndex = newValue.intValue();
+        });
+
+        initCustomerTable();
+        initSupplierTable();
     }
 
     @FXML
@@ -114,13 +141,9 @@ public class MainWindowController implements Initializable {
                 CustomersController.openAddNewCustomerWindow();
                 //refresh table
                 break;
-
             case 1://suppliers
-                ((FrmSupplierController) UICommonController.getInstance().
-                        openFXMLWindow("suppliers/frmSupplier.fxml",
-                                Modality.APPLICATION_MODAL, false, "")).initData(false);
+                SupplierController.openAddNewSupplierWindow();
                 break;
-
             case 2:
                 ((FrmItemController) UICommonController.getInstance().
                         openFXMLWindow("items/frmItem.fxml",
@@ -143,10 +166,10 @@ public class MainWindowController implements Initializable {
                 break;
 
             case 1://suppliers
-                ((FrmSupplierController) UICommonController.getInstance().
-                        openFXMLWindow("suppliers/frmSupplier.fxml",
-                                Modality.APPLICATION_MODAL, false, "")).initData(true);
-
+                if (tblSuppliers.getSelectionModel().getSelectedIndex() > 0) {
+                    String selectedID = tblSuppliers.getSelectionModel().getSelectedItem().getId();
+                    SupplierController.openEditSupplierWindow(selectedID);
+                }
                 break;
             case 2:
                 ((FrmItemController) UICommonController.getInstance().
@@ -160,19 +183,23 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void btnRemove_onClick(ActionEvent event) {
+     
     }
 
+    @FXML
+    private void txtItmSearch_Action(ActionEvent event) {
+    }
+
+//<editor-fold defaultstate="collapsed" desc="Coding for Controll Customers">
     @FXML
     private void txtCusSearch_onAction(Event event) {
         refreshCustomer();
     }
 
     @FXML
-    private void txtSupSearch_onAction(ActionEvent event) {
-    }
-
-    @FXML
-    private void txtItmSearch_Action(ActionEvent event) {
+    private void btnCusReset_onAction(ActionEvent event) {
+        txtCusSearch.setText("");
+        refreshCustomer();
     }
 
     private void refreshCustomer() {
@@ -210,13 +237,58 @@ public class MainWindowController implements Initializable {
         cusfNameColumn.setCellValueFactory(new PropertyValueFactory<>("fname"));
         cuslNameColumn.setCellValueFactory(new PropertyValueFactory<>("lname"));
     }
+//</editor-fold>
 
-    @FXML
-    private void btnCusReset_onAction(ActionEvent event) {
-        txtCusSearch.setText("");
-        refreshCustomer();
+//<editor-fold defaultstate="collapsed" desc="Coding for COntroll Supplier">
+    private void initSupplierTable() {
+        tblSuppliers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        supAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        supIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        supTpColumn.setCellValueFactory(new PropertyValueFactory<>("telephone"));
+        supFnameColumn.setCellValueFactory(new PropertyValueFactory<>("fname"));
+        supLnameColumn.setCellValueFactory(new PropertyValueFactory<>("lname"));
     }
-
+    
+    @FXML
+    private void btnSupReset_onAction(ActionEvent event) {
+        txtSupSearch.setText("");
+        refreshSupplier();
+    }
+    
+    @FXML
+    private void txtSupSearch_onAction(ActionEvent event) {
+        refreshSupplier();
+    }
+    
+    private void refreshSupplier() {
+        String txt = txtSupSearch.getText();
+        supData.clear();
+        switch (cmbSupSelectedIndex) {
+            case 0:
+                SupplierController.refreshTable(this, SupplierController.PersonColumns.SupplierID, txt);
+                break;
+            case 1:
+                SupplierController.refreshTable(this, SupplierController.PersonColumns.Name, txt);
+                break;
+            case 2:
+                SupplierController.refreshTable(this, SupplierController.PersonColumns.Telephone, txt);
+                break;
+            case 3:
+                SupplierController.refreshTable(this, SupplierController.PersonColumns.Address, txt);
+                break;
+        }
+    }
+    
+    public void tblSupplierAddItem(String id, String fname, String lname, String address, String tp) {
+        supData.add(new PersonTableRow(id, fname, lname, address, tp));
+    }
+    
+    public void tblSupplierSetItems() {
+        tblSuppliers.getItems().setAll(supData);
+    }
+//</editor-fold>
+    
+    
     //table details classes;
     public class PersonTableRow {
 

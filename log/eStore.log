@@ -3,3 +3,6 @@
 2016 Jul 30 00:04:37,475 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.
 2016 Jul 30 00:08:41,453 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.
 2016 Jul 30 00:10:10,574 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - Customer Saving is not done.
+2016 Jul 31 00:51:49,190 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
+2016 Jul 31 00:52:44,022 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
+2016 Jul 31 00:53:47,111 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
