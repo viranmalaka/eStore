@@ -118,9 +118,9 @@
                      <center>
                         <TableView fx:id="tblItems" prefHeight="329.0" prefWidth="545.0" BorderPane.alignment="CENTER">
                            <columns>
-                              <TableColumn prefWidth="75.0" text="Item ID" />
-                              <TableColumn prefWidth="75.0" text="Name" />
-                              <TableColumn prefWidth="75.0" text="Quantity" />
+                              <TableColumn fx:id="itmDColumn" prefWidth="75.0" text="Item ID" />
+                              <TableColumn fx:id="itmNameColumn" prefWidth="75.0" text="Name" />
+                              <TableColumn fx:id="Item" prefWidth="75.0" text="Quantity" />
                               <TableColumn prefWidth="97.0" text="Last Supplier" />
                            </columns>
                            <padding>

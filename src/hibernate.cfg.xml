@@ -30,5 +30,6 @@
     <!-- path of the class that put @entity annotation -->
     <mapping class="model.Customer"/>
     <mapping class="model.Supplier"/>
+    <mapping class="model.Item"/>
   </session-factory>
 </hibernate-configuration>

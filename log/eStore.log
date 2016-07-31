@@ -6,3 +6,5 @@
 2016 Jul 31 00:51:49,190 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
 2016 Jul 31 00:52:44,022 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
 2016 Jul 31 00:53:47,111 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
+2016 Jul 31 23:07:23,354 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'I00001' for key 'UK_nc3iibx5x5qb865sd253a18jm'
+2016 Jul 31 23:07:23,357 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.exception.ConstraintViolationException: could not execute statement

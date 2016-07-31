@@ -72,7 +72,7 @@ public class FrmSupplierController implements Initializable {
     }
 
     public void initData(String supplierID) { // for new supplier
-        lblTitle.setText("Ädd New Supplier");
+        lblTitle.setText("Add New Supplier");
         txtSupID.setText(supplierID);
         foredit = false;
 
