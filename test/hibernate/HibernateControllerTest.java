@@ -32,18 +32,10 @@ public class HibernateControllerTest {
     @Test
     public void testSaveObject() {
         Session s = SessionManager.getInstance().getSessionFactory().openSession();
-        Supplier get = s.get(Supplier.class, 3);
         
         System.out.println("saveObject");
-        Item obj = new Item();
-        obj.setExpDate(new Date());
-        obj.setItemID("I00004");
-        obj.setLastPurchasePrice(156);
-        obj.setLastSupplier(get);
-        obj.setName("Parippu");
-        obj.setQuantity(168);
-        obj.setScale("u");
-        obj.setSellingPrice(168);
+        Item obj = new Item("I002", "parippu", Item.Units.l);
+        
         boolean expResult = true;
         boolean result = HibernateController.saveObject(obj);
         assertEquals(expResult, result);

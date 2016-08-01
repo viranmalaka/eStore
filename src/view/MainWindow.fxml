@@ -118,10 +118,14 @@
                      <center>
                         <TableView fx:id="tblItems" prefHeight="329.0" prefWidth="545.0" BorderPane.alignment="CENTER">
                            <columns>
-                              <TableColumn fx:id="itmDColumn" prefWidth="75.0" text="Item ID" />
-                              <TableColumn fx:id="itmNameColumn" prefWidth="75.0" text="Name" />
-                              <TableColumn fx:id="Item" prefWidth="75.0" text="Quantity" />
-                              <TableColumn prefWidth="97.0" text="Last Supplier" />
+                              <TableColumn fx:id="itmIDColumn" prefWidth="58.0" text="Item ID" />
+                              <TableColumn fx:id="itmNameColumn" prefWidth="117.0" text="Name" />
+                              <TableColumn fx:id="ItmQtyColumn" prefWidth="52.0" text="Qty" />
+                              <TableColumn fx:id="itmScaleColumn" prefWidth="42.0" text="Scale" />
+                              <TableColumn fx:id="itmLastSupColumn" text="Last Supplier" />
+                              <TableColumn fx:id="itmExpDateColumn" prefWidth="62.0" text="Exp Date" />
+                              <TableColumn fx:id="itmLPPriceColumn" prefWidth="67.0" text="Last Purchase Price" />
+                              <TableColumn fx:id="itmPriceColumn" prefWidth="67.0" text="Price" />
                            </columns>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -144,6 +148,11 @@
                                     <Insets left="5.0" />
                                  </FlowPane.margin>
                               </TextField>
+                              <Button mnemonicParsing="false" onAction="#btnItemReset_onAction" text="X">
+                                 <FlowPane.margin>
+                                    <Insets left="5.0" />
+                                 </FlowPane.margin>
+                              </Button>
                            </children>
                            <BorderPane.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

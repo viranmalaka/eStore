@@ -44,25 +44,22 @@ public class Item {
     @Column(length = 1)
     Units scale;
 
-    public String getScale() {
-        return scale.toString().substring(0, 1);
+    public Item(String itemID, String name, Units scale) {
+        this.itemID = itemID;
+        this.name = name;
+        this.scale = scale;
     }
 
-    public void setScale(String scale) {
-        switch (scale) {
-            case "k":
-                this.scale = Units.kg;
-                break;
-            case "l":
-                this.scale = Units.l;
-                break;
-            case "m":
-                this.scale = Units.m;
-                break;
-            case "u":
-                this.scale = Units.unit;
-                break;
-        }
+    public Item() {
+    }
+
+    
+    public Units getScale() {
+        return scale;
+    }
+
+    public void setScale(Units scale) {
+        this.scale = scale;
     }
 
     public long getId() {
