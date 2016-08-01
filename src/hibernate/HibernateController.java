@@ -20,7 +20,7 @@ public class HibernateController {
             SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            session.save(obj);
+            session.persist(obj);
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
@@ -30,6 +30,5 @@ public class HibernateController {
         }
         return true;
     }
-    
-    
+
 }

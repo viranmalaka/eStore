@@ -8,3 +8,11 @@
 2016 Jul 31 00:53:47,111 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.Supplier
 2016 Jul 31 23:07:23,354 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'I00001' for key 'UK_nc3iibx5x5qb865sd253a18jm'
 2016 Jul 31 23:07:23,357 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.exception.ConstraintViolationException: could not execute statement
+2016 Jul 31 23:50:43,791 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.PurchaseOrder
+2016 Jul 31 23:50:43,817 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'I00004' for key 'UK_nc3iibx5x5qb865sd253a18jm'
+2016 Jul 31 23:50:43,818 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.exception.ConstraintViolationException: could not execute statement
+2016 Jul 31 23:51:00,772 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.PurchaseOrder
+2016 Jul 31 23:51:56,875 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.PurchaseOrder
+2016 Jul 31 23:53:13,981 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.PurchaseOrder
+2016 Aug 01 07:46:06,144 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'I00004' for key 'UK_nc3iibx5x5qb865sd253a18jm'
+2016 Aug 01 07:46:06,177 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.exception.ConstraintViolationException: could not execute statement

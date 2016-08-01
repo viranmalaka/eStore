@@ -8,7 +8,6 @@ package model;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +25,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(length = 7, nullable = false, unique = true, updatable = false)
     private String itemID;
@@ -42,9 +41,9 @@ public class Item {
     private Date expDate;
     private double lastPurchasePrice;
     private double SellingPrice;
+    @Column(length = 1)
     Units scale;
 
-    @Column(length = 1)
     public String getScale() {
         return scale.toString().substring(0, 1);
     }
@@ -66,12 +65,8 @@ public class Item {
         }
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getItemID() {

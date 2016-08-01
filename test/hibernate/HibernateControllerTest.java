@@ -7,6 +7,8 @@ package hibernate;
 
 import java.util.Date;
 import model.Item;
+import model.PurchaseOrder;
+import model.PurchaseOrderItem;
 import model.Supplier;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -32,13 +34,38 @@ public class HibernateControllerTest {
         System.out.println("saveObject");
         Item obj = new Item();
         obj.setExpDate(new Date());
-        obj.setItemID("I00003");
+        obj.setItemID("I00004");
         obj.setLastPurchasePrice(156);
         obj.setLastSupplier(get);
         obj.setName("Parippu");
         obj.setQuantity(168);
-        obj.setScale("m");
+        obj.setScale("u");
         obj.setSellingPrice(168);
+        boolean expResult = true;
+        boolean result = HibernateController.saveObject(obj);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+    }
+    
+    @Test
+    public void testSaveObject2() {
+        Session s = SessionManager.getInstance().getSessionFactory().openSession();
+
+        
+        System.out.println("saveObject Purchase Order");
+        PurchaseOrder obj = new PurchaseOrder();
+
+        PurchaseOrderItem i1 = new PurchaseOrderItem();
+        i1.setItem(s.get(Item.class, 1));
+        i1.setPurchaseOrder(obj);
+        
+        PurchaseOrderItem i2 = new PurchaseOrderItem();
+        i2.setItem(s.get(Item.class, 3));
+        i2.setPurchaseOrder(obj);
+        
+        obj.getItems().add(i1);
+        obj.getItems().add(i2);
+        
         boolean expResult = true;
         boolean result = HibernateController.saveObject(obj);
         assertEquals(expResult, result);
