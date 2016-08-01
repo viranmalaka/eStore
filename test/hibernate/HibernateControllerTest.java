@@ -6,9 +6,12 @@
 package hibernate;
 
 import java.util.Date;
+import model.Customer;
 import model.Item;
 import model.PurchaseOrder;
 import model.PurchaseOrderItem;
+import model.SaleOrder;
+import model.SaleOrderItem;
 import model.Supplier;
 import org.hibernate.Session;
 import org.junit.Test;
@@ -71,5 +74,23 @@ public class HibernateControllerTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
     }
-    
+ 
+    @Test
+    public void testSaveObject3() {
+        /*System.out.println("saveObject Sales Order");
+        
+        Session s = SessionManager.getInstance().getSessionFactory().openSession();
+        
+        SaleOrder obj = new SaleOrder();
+        obj.customer = s.get(Customer.class, 1);
+        obj.items.add(new SaleOrderItem(obj, s.get(Item.class, 2)));
+        obj.items.add(new SaleOrderItem(obj, s.get(Item.class, 1)));
+        obj.items.add(new SaleOrderItem(obj, s.get(Item.class, 3)));
+        
+        
+        boolean expResult = true;
+        boolean result = HibernateController.saveObject(obj);
+        assertEquals(expResult, result);*/
+        // TODO review the generated test code and remove the default call to fail.
+    }
 }

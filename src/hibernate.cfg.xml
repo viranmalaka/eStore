@@ -33,5 +33,7 @@
     <mapping class="model.Item"/>
     <mapping class="model.PurchaseOrder"/>
     <mapping class="model.PurchaseOrderItem"/>
+    <mapping class="model.SaleOrder"/>
+    <mapping class="model.SaleOrderItem"/>
   </session-factory>
 </hibernate-configuration>

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -26,16 +27,19 @@ public class PurchaseOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Temporal(TemporalType.DATE)
     private Date date;
     private boolean paid;
     private double total;
 
+    @OneToOne
+    Supplier supplier;
+    
     @OneToMany(mappedBy = "purchaseOrder",cascade = CascadeType.PERSIST)
     private List<PurchaseOrderItem> items = new ArrayList<>();
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -70,4 +74,13 @@ public class PurchaseOrder {
     public void addItems(PurchaseOrderItem i) {
         this.items.add(i);
     }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+    
 }

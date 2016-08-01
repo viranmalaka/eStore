@@ -20,7 +20,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class PurchaseOrderItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @ManyToOne
     private Item item;
     
@@ -34,7 +34,7 @@ public class PurchaseOrderItem {
     private double labeledSellingPrice;
     private Date expDate;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

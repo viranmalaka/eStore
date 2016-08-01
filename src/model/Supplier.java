@@ -21,7 +21,7 @@ public class Supplier {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(length = 7, nullable = false, unique = true, updatable = false)
     private String supplierID; // 'S' + [5*0]id
@@ -115,12 +115,8 @@ public class Supplier {
         this.address = address;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 }
