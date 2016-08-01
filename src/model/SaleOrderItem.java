@@ -16,23 +16,68 @@ import javax.persistence.OneToOne;
  */
 public class SaleOrderItem {
     @Id @GeneratedValue
-    public long id;
-     /*
+    private long id;
     @ManyToOne
-    public SaleOrder saleOrder;
-    
+    private SaleOrder saleOrder;
     @OneToOne
-    public Item item;
+    private Item item;
     
-    public SaleOrderItem(SaleOrder s, Item i) {
-    saleOrder = s;
-    item = i;
+    private double qty;
+    private double sellingPrice;
+    private double total;
+    private float discount;
+
+    public long getId() {
+        return id;
+    }
+
+    public SaleOrder getSaleOrder() {
+        return saleOrder;
+    }
+
+    public void setSaleOrder(SaleOrder saleOrder) {
+        this.saleOrder = saleOrder;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public double getQty() {
+        return qty;
+    }
+
+    public void setQty(double qty) {
+        this.qty = qty;
+    }
+
+    public double getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
     }
     
     
-    
-    double qty;
-    double sellingPrice;
-    double total;
-    float discount;*/
 }

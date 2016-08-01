@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -62,6 +63,12 @@ public class FrmPurchaseOrderController implements Initializable {
     private Button btnClose;
     @FXML
     private TableView<?> tblItems;
+    @FXML
+    private TextField txtOrderID;
+    @FXML
+    private TextField txtPurchasePrice1;
+    @FXML
+    private CheckBox chkPaid;
 
     /**
      * Initializes the controller class.
@@ -105,6 +112,10 @@ public class FrmPurchaseOrderController implements Initializable {
 
     @FXML
     private void btnClose_onAction(ActionEvent event) {
+    }
+
+    public void initData(String newPOId) {
+        txtOrderID.setText(newPOId);
     }
     
 }

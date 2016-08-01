@@ -6,10 +6,13 @@
 package view;
 
 import controller.CustomersController;
+import controller.ItemController;
 import controller.SupplierController;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -26,8 +29,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import view.items.FrmItemController;
 
 /**
  * FXML Controller class
@@ -56,7 +57,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private TableView<PersonTableRow> tblSuppliers;
     @FXML
-    private ChoiceBox<?> cmbItmSearchItem;
+    private ChoiceBox<String> cmbItmSearchItem;
     @FXML
     private TextField txtItmSearch;
     @FXML
@@ -81,14 +82,32 @@ public class MainWindowController implements Initializable {
     private TableColumn<PersonTableRow, String> supTpColumn;
     @FXML
     private TableColumn<PersonTableRow, String> supAddressColumn;
-//</editor-fold>
+    @FXML
+    private TableView<ItemTableRow> tblItems;
+    @FXML
+    private TableColumn<ItemTableRow, String> itmNameColumn;
+    @FXML
+    private TableColumn<ItemTableRow, Double> ItmQtyColumn;
+    @FXML
+    private TableColumn<ItemTableRow, String> itmScaleColumn;
+    @FXML
+    private TableColumn<ItemTableRow, String> itmLastSupColumn;
+    @FXML
+    private TableColumn<ItemTableRow, String> itmExpDateColumn;
+    @FXML
+    private TableColumn<ItemTableRow, Double> itmLPPriceColumn;
+    @FXML
+    private TableColumn<ItemTableRow, Double> itmPriceColumn;
+    @FXML
+    private TableColumn<ItemTableRow, String> itmIDColumn;
 
+//</editor-fold>
     private int cmbSupSelectedIndex;
     private int cmbCusSelectedIndex;
+    private int cmbItmSelectedIndex;
     private ObservableList<PersonTableRow> cusData = FXCollections.observableArrayList();
     private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
-    @FXML
-    private TableView<?> tblItems;
+    private ObservableList<ItemTableRow> itmData = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -111,9 +130,17 @@ public class MainWindowController implements Initializable {
                 add("Address");
             }
         }));
+        cmbItmSearchItem.setItems(FXCollections.observableList(new ArrayList<String>() {
+            {
+                add("ItemID");
+                add("Name");
+                add("Last Supplier");
+            }
+        }));
 
         cmbCusSearchItem.getSelectionModel().select(0);
         cmbSupSearchItem.getSelectionModel().select(0);
+        cmbItmSearchItem.getSelectionModel().select(0);
 
         cmbCusSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             cmbCusSelectedIndex = newValue.intValue();
@@ -121,9 +148,13 @@ public class MainWindowController implements Initializable {
         cmbSupSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             cmbSupSelectedIndex = newValue.intValue();
         });
+        cmbItmSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            cmbItmSelectedIndex = newValue.intValue();
+        });
 
         initCustomerTable();
         initSupplierTable();
+        initItemTable();
     }
 
     @FXML
@@ -137,9 +168,7 @@ public class MainWindowController implements Initializable {
                 SupplierController.openAddNewSupplierWindow();
                 break;
             case 2:
-                ((FrmItemController) UICommonController.getInstance().
-                        openFXMLWindow("items/frmItem.fxml",
-                                Modality.APPLICATION_MODAL, false, "")).initData(false);
+                ItemController.openAddNewItemWindow();
                 break;
             default:
                 throw new AssertionError();
@@ -164,9 +193,10 @@ public class MainWindowController implements Initializable {
                 }
                 break;
             case 2:
-                ((FrmItemController) UICommonController.getInstance().
-                        openFXMLWindow("items/frmItem.fxml",
-                                Modality.APPLICATION_MODAL, false, "")).initData(true);
+                if (tblItems.getSelectionModel().getSelectedIndex() > 0) {
+                    String selectedID = tblItems.getSelectionModel().getSelectedItem().getId();
+                    ItemController.openEditItemWindow(selectedID);
+                }
                 break;
             default:
                 throw new AssertionError();
@@ -175,12 +205,57 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void btnRemove_onClick(ActionEvent event) {
-     
+
+    }
+
+//<editor-fold defaultstate="collapsed" desc="Coding for Controll Items">
+    @FXML
+    private void txtItmSearch_Action(ActionEvent event) {
+        refreshItems();
     }
 
     @FXML
-    private void txtItmSearch_Action(ActionEvent event) {
+    private void btnItemReset_onAction(ActionEvent event) {
+        txtItmSearch.setText("");
+        refreshItems();
     }
+
+    private void refreshItems() {
+        String txt = txtCusSearch.getText();
+        cusData.clear();
+        switch (cmbCusSelectedIndex) {
+            case 0:
+                ItemController.refreshTable(this, ItemController.ItemColumns.ItemID, txt);
+                break;
+            case 1:
+                ItemController.refreshTable(this, ItemController.ItemColumns.Name, txt);
+                break;
+            case 2:
+                ItemController.refreshTable(this, ItemController.ItemColumns.LastSupplier, txt);
+                break;
+        }
+    }
+
+    public void tblItemAddItem(String itemID, String name, String scale, double quantity, String date, double lastPurchasePrice, double sellingPrice, String supplierID) {
+        itmData.add(new ItemTableRow(itemID, name, scale, supplierID, date, quantity, lastPurchasePrice, sellingPrice));
+    }
+
+    public void tblItemSetItems() {
+        tblItems.getItems().setAll(itmData);
+    }
+
+    private void initItemTable() {
+        tblItems.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        itmIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        ItmQtyColumn.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        itmExpDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        itmLPPriceColumn.setCellValueFactory(new PropertyValueFactory<>("lastPurchasePrice"));
+        itmLastSupColumn.setCellValueFactory(new PropertyValueFactory<>("lastSupplierID"));
+        itmNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        itmPriceColumn.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+        itmScaleColumn.setCellValueFactory(new PropertyValueFactory<>("scale"));
+    }
+//</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Coding for Controll Customers">
     @FXML
@@ -240,18 +315,18 @@ public class MainWindowController implements Initializable {
         supFnameColumn.setCellValueFactory(new PropertyValueFactory<>("fname"));
         supLnameColumn.setCellValueFactory(new PropertyValueFactory<>("lname"));
     }
-    
+
     @FXML
     private void btnSupReset_onAction(ActionEvent event) {
         txtSupSearch.setText("");
         refreshSupplier();
     }
-    
+
     @FXML
     private void txtSupSearch_onAction(ActionEvent event) {
         refreshSupplier();
     }
-    
+
     private void refreshSupplier() {
         String txt = txtSupSearch.getText();
         supData.clear();
@@ -270,17 +345,16 @@ public class MainWindowController implements Initializable {
                 break;
         }
     }
-    
+
     public void tblSupplierAddItem(String id, String fname, String lname, String address, String tp) {
         supData.add(new PersonTableRow(id, fname, lname, address, tp));
     }
-    
+
     public void tblSupplierSetItems() {
         tblSuppliers.getItems().setAll(supData);
     }
 //</editor-fold>
-    
-    
+
     //table details classes;
     public class PersonTableRow {
 
@@ -373,4 +447,94 @@ public class MainWindowController implements Initializable {
 
     }
 
+    public class ItemTableRow {
+
+        private StringProperty id = new SimpleStringProperty("");
+        private StringProperty name = new SimpleStringProperty("");
+        private StringProperty scale = new SimpleStringProperty("");
+        private DoubleProperty qty = new SimpleDoubleProperty(0);
+        private StringProperty lastSupplierID = new SimpleStringProperty("");
+        private StringProperty date = new SimpleStringProperty("");
+        private DoubleProperty lastPurchasePrice = new SimpleDoubleProperty(0);
+        private DoubleProperty sellingPrice = new SimpleDoubleProperty(0);
+
+        public ItemTableRow() {
+        }
+
+        public ItemTableRow(String id, String name, String scale, String lastSID, String date,
+                double qty, double lpp, double lsp) {
+            setId(id);
+            setName(name);
+            setScale(scale);
+            setLastSupplierID(lastSID);
+            setDate(date);
+            setQty(qty);
+            setLastPurchasePrice(lpp);
+            setSellingPrice(lsp);
+        }
+
+        public String getId() {
+            return id.get();
+        }
+
+        public void setId(String id) {
+            this.id.set(id);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public String getScale() {
+            return scale.get();
+        }
+
+        public void setScale(String scale) {
+            this.scale.set(scale);
+        }
+
+        public String getLastSupplierID() {
+            return lastSupplierID.get();
+        }
+
+        public void setLastSupplierID(String lastSupplierID) {
+            this.lastSupplierID.set(lastSupplierID);
+        }
+
+        public String getDate() {
+            return date.get();
+        }
+
+        public void setDate(String date) {
+            this.date.set(date);
+        }
+
+        public Double getQty() {
+            return qty.get();
+        }
+
+        public void setQty(Double qty) {
+            this.qty.set(qty);
+        }
+
+        public Double getLastPurchasePrice() {
+            return lastPurchasePrice.get();
+        }
+
+        public void setLastPurchasePrice(Double lastPurchasePrice) {
+            this.lastPurchasePrice.set(lastPurchasePrice);
+        }
+
+        public Double getSellingPrice() {
+            return sellingPrice.get();
+        }
+
+        public void setSellingPrice(Double sellingPrice) {
+            this.sellingPrice.set(sellingPrice);
+        }
+    }
 }

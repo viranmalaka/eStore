@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,19 +26,80 @@ import javax.persistence.TemporalType;
 @Entity
 public class SaleOrder {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    /*
+    private long id;
+    @Column(length = 7,nullable = false,unique = true, updatable = false)
+    private String saleOrderID;
     @Temporal(TemporalType.DATE)
-    Date date;
+    private Date date;
     
-    //@OneToOne
-    public Customer customer;
+    @OneToOne
+    private Customer customer;
     
-    float overrollDiscount;
-    double Total;
-    boolean paid;
+    private float overrollDiscount;
+    private double Total;
+    private boolean paid;
     
     @OneToMany(mappedBy ="saleOrder", cascade = CascadeType.PERSIST)
-    public List<SaleOrderItem> items = new ArrayList<>();*/
+    private List<SaleOrderItem> items = new ArrayList<>();
+
+    public long getId() {
+        return id;
+    }
+
+    public String getSaleOrderID() {
+        return saleOrderID;
+    }
+
+    public void setSaleOrderID(String saleOrderID) {
+        this.saleOrderID = saleOrderID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public float getOverrollDiscount() {
+        return overrollDiscount;
+    }
+
+    public void setOverrollDiscount(float overrollDiscount) {
+        this.overrollDiscount = overrollDiscount;
+    }
+
+    public double getTotal() {
+        return Total;
+    }
+
+    public void setTotal(double Total) {
+        this.Total = Total;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public List<SaleOrderItem> getItems() {
+        return items;
+    }
+
+    public void addItem(SaleOrderItem item) {
+        this.items.add(item);
+    }
     
 }
