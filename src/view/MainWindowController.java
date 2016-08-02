@@ -7,6 +7,7 @@ package view;
 
 import controller.CustomersController;
 import controller.ItemController;
+import controller.PurchaseOrderController;
 import controller.SupplierController;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Customer;
 
 /**
  * FXML Controller class
@@ -108,6 +110,28 @@ public class MainWindowController implements Initializable {
     private ObservableList<PersonTableRow> cusData = FXCollections.observableArrayList();
     private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
     private ObservableList<ItemTableRow> itmData = FXCollections.observableArrayList();
+    @FXML
+    private ChoiceBox<?> cmbPOSearchItem;
+    @FXML
+    private TextField txtPOSearch;
+    @FXML
+    private TableView<?> tblOrders;
+    @FXML
+    private TableColumn<?, ?> itmIDColumn1;
+    @FXML
+    private TableColumn<?, ?> itmNameColumn1;
+    @FXML
+    private TableColumn<?, ?> ItmQtyColumn1;
+    @FXML
+    private TableColumn<?, ?> itmScaleColumn1;
+    @FXML
+    private TableColumn<?, ?> itmLastSupColumn1;
+    @FXML
+    private TableColumn<?, ?> itmExpDateColumn1;
+    @FXML
+    private TableColumn<?, ?> itmLPPriceColumn1;
+    @FXML
+    private TableColumn<?, ?> itmPriceColumn1;
 
     /**
      * Initializes the controller class.
@@ -162,13 +186,18 @@ public class MainWindowController implements Initializable {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
                 CustomersController.openAddNewCustomerWindow();
-                //refresh table
+                btnCusReset_onAction(event);
                 break;
             case 1://suppliers
                 SupplierController.openAddNewSupplierWindow();
+                btnSupReset_onAction(event);
                 break;
             case 2:
                 ItemController.openAddNewItemWindow();
+                btnItemReset_onAction(event);
+                break;
+            case 3:
+                PurchaseOrderController.openCreatePurchaseOrderWindow();
                 break;
             default:
                 throw new AssertionError();
@@ -205,7 +234,6 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void btnRemove_onClick(ActionEvent event) {
-
     }
 
 //<editor-fold defaultstate="collapsed" desc="Coding for Controll Items">
@@ -355,6 +383,10 @@ public class MainWindowController implements Initializable {
     }
 //</editor-fold>
 
+    @FXML
+    private void btnPOReset_onAction(ActionEvent event) {
+    }
+
     //table details classes;
     public class PersonTableRow {
 
@@ -449,28 +481,28 @@ public class MainWindowController implements Initializable {
 
     public class ItemTableRow {
 
-        private StringProperty id = new SimpleStringProperty("");
-        private StringProperty name = new SimpleStringProperty("");
-        private StringProperty scale = new SimpleStringProperty("");
-        private DoubleProperty qty = new SimpleDoubleProperty(0);
-        private StringProperty lastSupplierID = new SimpleStringProperty("");
-        private StringProperty date = new SimpleStringProperty("");
-        private DoubleProperty lastPurchasePrice = new SimpleDoubleProperty(0);
-        private DoubleProperty sellingPrice = new SimpleDoubleProperty(0);
+        private final StringProperty id = new SimpleStringProperty("");
+        private final StringProperty name = new SimpleStringProperty("");
+        private final StringProperty scale = new SimpleStringProperty("");
+        private final DoubleProperty qty = new SimpleDoubleProperty(0);
+        private final StringProperty lastSupplierID = new SimpleStringProperty("");
+        private final StringProperty date = new SimpleStringProperty("");
+        private final DoubleProperty lastPurchasePrice = new SimpleDoubleProperty(0);
+        private final DoubleProperty sellingPrice = new SimpleDoubleProperty(0);
 
         public ItemTableRow() {
         }
 
         public ItemTableRow(String id, String name, String scale, String lastSID, String date,
                 double qty, double lpp, double lsp) {
-            setId(id);
-            setName(name);
-            setScale(scale);
-            setLastSupplierID(lastSID);
-            setDate(date);
-            setQty(qty);
-            setLastPurchasePrice(lpp);
-            setSellingPrice(lsp);
+            this.id.set(id);
+            this.name.set(name);
+            this.scale.set(scale);
+            this.lastSupplierID.set(lastSID);
+            this.date.set(date);
+            this.qty.set(qty);
+            this.lastPurchasePrice.set(lpp);
+            this.sellingPrice.set(lsp);
         }
 
         public String getId() {

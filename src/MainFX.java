@@ -1,5 +1,6 @@
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.MainWindowController;
@@ -18,10 +19,13 @@ public class MainFX extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        UICommonController.getInstance().openFXMLWindow("MainWindow.fxml", 
-                        Modality.NONE, true, 
-                        "eStore - CapricornSoft Corporation");
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("MainWindow.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.NONE);
+        stage.setResizable(true);
+        stage.setTitle("eStore - CapricornSoft Corporation");
         
+        stage.show();  
     }
 
     public static void main(String[] args) {

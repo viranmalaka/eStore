@@ -7,8 +7,11 @@ package controller;
 
 import hibernate.HibernateController;
 import hibernate.SessionManager;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.Customer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -63,9 +66,15 @@ public class CustomersController {
 
     public static void openAddNewCustomerWindow() {
         String newCustomerId = CommonControllers.convertIndex(getNextIndex(), 'C');
-        ((FrmCustomerController) UICommonController.getInstance().
-                openFXMLWindow("customers/frmCustomer.fxml",
-                        Modality.APPLICATION_MODAL, false, "Add New Customer")).initData(newCustomerId);
+        
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("customers/frmCustomer.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setTitle("Add New Customer");
+        ((FrmCustomerController)createFXML.getController()).initData(newCustomerId);
+        
+        stage.showAndWait();
     }
 
     public static void openEditCustomerWindow(String id) {
@@ -76,22 +85,43 @@ public class CustomersController {
         Criteria criteria = session.createCriteria(Customer.class);
         Customer customer = (Customer) criteria.add(Restrictions.eq("customerID", id)).uniqueResult();
 
-        ((FrmCustomerController) UICommonController.getInstance().
-                openFXMLWindow("customers/frmCustomer.fxml",
-                        Modality.APPLICATION_MODAL, false, "Add New Customer")).initData(
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("customers/frmCustomer.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setTitle("Edit Customer");
+        ((FrmCustomerController)createFXML.getController()).initData(
                         customer.getCustomerID(),
                         customer.getFirstName(),
                         customer.getLastName(),
                         customer.getTelephone(),
                         customer.getAddress());
         session.close();
+        stage.showAndWait();
     }
 
     public static void refreshTable(MainWindowController controller, PersonColumns col, String arg) {
+        List<Customer> list = getFilterdCustomers(arg, col);
+
+        if (list != null && list.size() > 0) {
+            for (Customer customer : list) {
+                controller.tblCustomerAddItem(customer.getCustomerID(),
+                        customer.getFirstName(),
+                        customer.getLastName(),
+                        customer.getAddress(),
+                        customer.getTelephone());
+            }
+        }
+        controller.tblCustomerSetItems();
+    }
+
+    public static List<Customer> getFilterdCustomers(String arg, PersonColumns p) {
         SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
         Session session = sessionFactory.openSession();
+        session.beginTransaction();
         List<Customer> list = null;
-        switch (col) {
+
+        switch (p) {
             case Address:
                 list = session.createCriteria(Customer.class).add(Restrictions.like("address", "%" + arg + "%")).list();
                 break;
@@ -107,19 +137,32 @@ public class CustomersController {
                 list = session.createCriteria(Customer.class).add(Restrictions.like("telephone", "%" + arg + "%")).list();
                 break;
         }
+        session.close();
+        return list;
+    }
 
-        if (list != null && list.size() > 0) {
-            for (Customer customer : list) {
-                controller.tblCustomerAddItem(customer.getCustomerID(),
-                        customer.getFirstName(),
-                        customer.getLastName(),
-                        customer.getAddress(),
-                        customer.getTelephone());
+    public static ArrayList getFilteredListWithProjection(String arg, PersonColumns p) {
+        List<Customer> filterdCustomers = getFilterdCustomers(arg, p);
+        ArrayList<String> res = new ArrayList<String>();
+        for (Customer filterdCustomer : filterdCustomers) {
+            switch (p) {
+                case Address:
+                    res.add(filterdCustomer.getAddress());
+                    break;
+                case CustomerID:
+                    res.add(filterdCustomer.getCustomerID());
+                    break;
+                case Name:
+                    res.add(filterdCustomer.getFirstName() + " " + filterdCustomer.getLastName());
+                    break;
+                case Telephone:
+                    res.add(filterdCustomer.getTelephone());
+                    break;
             }
         }
-        controller.tblCustomerSetItems();
-        session.close();
+        return res;
     }
+    
 
     public static enum PersonColumns {
         CustomerID, Name, Address, Telephone

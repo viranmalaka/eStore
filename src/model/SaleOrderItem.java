@@ -5,6 +5,7 @@
  */
 package model;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
  *
  * @author Malaka
  */
+@Entity
 public class SaleOrderItem {
     @Id @GeneratedValue
     private long id;

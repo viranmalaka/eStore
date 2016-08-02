@@ -9,7 +9,9 @@ import hibernate.HibernateController;
 import hibernate.SessionManager;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.Item;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -28,9 +30,15 @@ public class ItemController {
 
     public static void openAddNewItemWindow() {
         String newItemId = CommonControllers.convertIndex(getNextIndex(), 'I');
-        ((FrmItemController) UICommonController.getInstance().
-                openFXMLWindow("items/frmItem.fxml",
-                        Modality.APPLICATION_MODAL, false, "Add New Item")).initData(newItemId);
+        
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("items/frmItem.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setTitle("Add New Item");
+        ((FrmItemController)createFXML.getController()).initData(newItemId);
+        
+        stage.showAndWait();
     }
 
     public static boolean saveItem(String itemID, String name, Item.Units scale) {
@@ -75,13 +83,18 @@ public class ItemController {
         Criteria criteria = session.createCriteria(Item.class);
         Item item = (Item) criteria.add(Restrictions.eq("itemID", id)).uniqueResult();
 
-        ((FrmItemController) UICommonController.getInstance().
-                openFXMLWindow("items/frmItem.fxml",
-                        Modality.APPLICATION_MODAL, false, "Add New Item")).initData(
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("items/frmItem.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setTitle("Edit Item");
+        ((FrmItemController)createFXML.getController()).initData(
                         item.getItemID(),
                         item.getName(),
                         item.getScale().toString());
         session.close();
+        
+        stage.showAndWait();
     }
 
     public static ArrayList<String> getAllUnits() {

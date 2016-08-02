@@ -6,7 +6,9 @@
 package controller;
 
 import hibernate.SessionManager;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.PurchaseOrder;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -22,9 +24,14 @@ import view.orders.FrmPurchaseOrderController;
 public class PurchaseOrderController {
     public static void openCreatePurchaseOrderWindow() {
         String newPOId = CommonControllers.convertIndex(getNextIndex(), 'P');
-        ((FrmPurchaseOrderController) UICommonController.getInstance().
-                openFXMLWindow("items/frmItem.fxml",
-                        Modality.APPLICATION_MODAL, false, "Add New Item")).initData(newPOId);
+        FXMLLoader createFXML = UICommonController.getInstance().createFXML("orders/frmPurchaseOrder.fxml");
+        Stage stage = UICommonController.getInstance().getStage(createFXML);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setTitle("Add New Purchase Order");
+        ((FrmPurchaseOrderController)createFXML.getController()).initData(newPOId);
+        
+        stage.showAndWait();
     }
 
     private static long getNextIndex() {
@@ -39,4 +46,5 @@ public class PurchaseOrderController {
         }
         return Long.parseLong(maxID + "") + 1;
     }
-}
+
+  }
