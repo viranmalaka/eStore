@@ -43,8 +43,11 @@ public class FrmItemController implements Initializable {
     @FXML
     private ChoiceBox<String> cmbItmUnit;
     @FXML
+    
+    
     private Label lblTitle;
     private boolean forEdit;
+    private boolean added;
 
     /**
      * Initializes the controller class.
@@ -59,7 +62,8 @@ public class FrmItemController implements Initializable {
     private void btnSave_onAction(ActionEvent event) {
         String id = txtItmID.getText();
         String name = txtItmName.getText();
-        String scale = cmbItmUnit.getValue();
+        String scale = cmbItmUnit.getSelectionModel().getSelectedItem();
+        int selIndex = cmbItmUnit.getSelectionModel().getSelectedIndex();
         switch (1) {
             case 1:
                 String emptyItem = "";
@@ -67,7 +71,7 @@ public class FrmItemController implements Initializable {
                 if (name.equals("")) {
                     emptyItem += "Name \n";
                 }
-                if (scale.equals("")) {
+                if (selIndex < 0) {
                     emptyItem += "Unit \n";
                 }
 
@@ -92,20 +96,24 @@ public class FrmItemController implements Initializable {
                     if (!updateItem) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Item is not Updated Successfully");
                         LogController.log(Level.ERROR, "Item Updating is not done.");
+                        added = false;
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Item is Updated Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "Item Updated - " + id);
+                        added = true;
                     }
                 }else{
                     boolean saveItem = ItemController.saveItem(id, name, Item.Units.valueOf(scale));
                     if (!saveItem) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Item is not Saved Successfully");
                         LogController.log(Level.ERROR, "Item Saving is not done.");
+                        added = false;
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Item is Saved Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "New Item Created - " + id);
+                        added = true;
                     }
                 }
         }
@@ -119,6 +127,7 @@ public class FrmItemController implements Initializable {
                 ButtonType.YES,ButtonType.NO);
         if (showAlertBox.get() == ButtonType.YES) {
             ((Stage) btnClose.getScene().getWindow()).close();
+            added = false;
         }
     }
 
@@ -134,6 +143,10 @@ public class FrmItemController implements Initializable {
         lblTitle.setText("Edit Item");
         txtItmName.setText(name);
         cmbItmUnit.getSelectionModel().select(scale);
+    }
+
+    public boolean isAdded() {
+        return added;
     }
 
 }

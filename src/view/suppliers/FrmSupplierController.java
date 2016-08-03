@@ -49,6 +49,7 @@ public class FrmSupplierController implements Initializable {
     private Label lblTitle;
 
     boolean foredit;
+    private boolean added;
 
     /**
      * Initializes the controller class.
@@ -136,10 +137,12 @@ public class FrmSupplierController implements Initializable {
                     if (!updateSupplier) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Supplier is not Updated Successfully");
                         LogController.log(Level.ERROR, "Supplier Updating is not done.");
+                        added = false;
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Supplier is Updated Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "Supplier Updated - " + sId);
+                        added = true;
                     }
                 } else {
                     // adding new supplier
@@ -147,10 +150,12 @@ public class FrmSupplierController implements Initializable {
                     if (!saveSupplier) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Supplier is not Saved Successfully");
                         LogController.log(Level.ERROR, "Supplier Saving is not done.");
+                        added = false;
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Supplier is Saved Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "New Supplier Created - " + sId);
+                        added = true;
                     }
                 }
         }
@@ -164,7 +169,12 @@ public class FrmSupplierController implements Initializable {
                 ButtonType.YES,ButtonType.NO);
         if (showAlertBox.get() == ButtonType.YES) {
             ((Stage) btnClose.getScene().getWindow()).close();
+            added = false;
         }
+    }
+
+    public boolean isAdded() {
+        return added;
     }
 
 }

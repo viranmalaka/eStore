@@ -1,8 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ * and open the template in the editor. */
 package controller;
 
 import hibernate.HibernateController;
@@ -21,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import view.MainWindowController;
 import view.UICommonController;
 import view.items.FrmItemController;
+import view.orders.FrmPurchaseOrderController;
 
 /**
  *
@@ -28,17 +28,18 @@ import view.items.FrmItemController;
  */
 public class ItemController {
 
-    public static void openAddNewItemWindow() {
+    public static boolean openAddNewItemWindow() {
         String newItemId = CommonControllers.convertIndex(getNextIndex(), 'I');
-        
+
         FXMLLoader createFXML = UICommonController.getInstance().createFXML("items/frmItem.fxml");
         Stage stage = UICommonController.getInstance().getStage(createFXML);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setTitle("Add New Item");
-        ((FrmItemController)createFXML.getController()).initData(newItemId);
-        
+        ((FrmItemController) createFXML.getController()).initData(newItemId);
+
         stage.showAndWait();
+        return ((FrmItemController) createFXML.getController()).isAdded();
     }
 
     public static boolean saveItem(String itemID, String name, Item.Units scale) {
@@ -88,12 +89,12 @@ public class ItemController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setTitle("Edit Item");
-        ((FrmItemController)createFXML.getController()).initData(
-                        item.getItemID(),
-                        item.getName(),
-                        item.getScale().toString());
+        ((FrmItemController) createFXML.getController()).initData(
+                item.getItemID(),
+                item.getName(),
+                item.getScale().toString());
         session.close();
-        
+
         stage.showAndWait();
     }
 
@@ -106,21 +107,7 @@ public class ItemController {
     }
 
     public static void refreshTable(MainWindowController controller, ItemColumns itemColumns, String arg) {
-        SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
-        Session session = sessionFactory.openSession();
-        List<Item> list = null;
-        switch (itemColumns) {
-            case ItemID:
-                list = session.createCriteria(Item.class).add(Restrictions.like("itemID", "%" + arg + "%")).list();
-                break;
-            case LastSupplier:
-                list = session.createCriteria(Item.class).add(Restrictions.like("lastSupplierId", "%" + arg + "%")).list();
-                break;
-            case Name:
-                list = session.createCriteria(Item.class).add(Restrictions.like("telephone", "%" + arg + "%")).list();
-                break;
-        }
-
+        List<Item> list = getFilterdItem(itemColumns, arg);
         if (list != null && list.size() > 0) {
             for (Item item : list) {
                 controller.tblItemAddItem(item.getItemID(),
@@ -130,11 +117,36 @@ public class ItemController {
                         item.getExpDate() == null ? "" : item.getExpDate().toString(),
                         item.getLastPurchasePrice(),
                         item.getSellingPrice(),
-                        item.getLastSupplier() == null ?  "": item.getLastSupplier().getSupplierID());
+                        item.getLastSupplier() == null ? "" : item.getLastSupplier().getSupplierID());
             }
         }
         controller.tblItemSetItems();
-        session.close();
+    }
+
+    public static void setItemInPurchaseOrder(FrmPurchaseOrderController aThis, ItemColumns itemColumns, String text) {
+        List<Item> list = getFilterdItem(itemColumns, text);
+        if (list != null) {
+            Item get = list.get(0);
+            aThis.setItemValue(get.getItemID(),
+                    get.getName(),
+                    get.getScale().toString());
+        }
+    }
+
+    public  static List<Item> getFilterdItem(ItemColumns itemColumns, String arg) {
+        SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            switch (itemColumns) {
+                case ItemID:
+                    return session.createCriteria(Item.class).add(Restrictions.like("itemID", "%" + arg + "%")).list();
+                case LastSupplier:
+                    return session.createCriteria(Item.class).add(Restrictions.like("lastSupplierId", "%" + arg + "%")).list();
+                case Name:
+                    return session.createCriteria(Item.class).add(Restrictions.like("name", "%" + arg + "%")).list();
+                default:
+                    return null;
+            }
+        }
     }
 
     public static enum ItemColumns {

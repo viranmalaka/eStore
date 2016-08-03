@@ -209,22 +209,25 @@ public class MainWindowController implements Initializable {
     private void btnEdit_onClick(ActionEvent event) {
         switch (tabPane.getSelectionModel().getSelectedIndex()) {
             case 0: //customers
-                if (tblCustomers.getSelectionModel().getSelectedIndex() > 0) {
+                if (tblCustomers.getSelectionModel().getSelectedIndex() >= 0) {
                     String selectedID = tblCustomers.getSelectionModel().getSelectedItem().getId();
                     CustomersController.openEditCustomerWindow(selectedID);
+                    btnCusReset_onAction(event);
                 }
                 break;
 
             case 1://suppliers
-                if (tblSuppliers.getSelectionModel().getSelectedIndex() > 0) {
+                if (tblSuppliers.getSelectionModel().getSelectedIndex() >= 0) {
                     String selectedID = tblSuppliers.getSelectionModel().getSelectedItem().getId();
                     SupplierController.openEditSupplierWindow(selectedID);
+                    btnSupReset_onAction(event);
                 }
                 break;
             case 2:
-                if (tblItems.getSelectionModel().getSelectedIndex() > 0) {
+                if (tblItems.getSelectionModel().getSelectedIndex() >= 0) {
                     String selectedID = tblItems.getSelectionModel().getSelectedItem().getId();
                     ItemController.openEditItemWindow(selectedID);
+                    btnSupReset_onAction(event);
                 }
                 break;
             default:

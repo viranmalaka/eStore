@@ -1,8 +1,11 @@
 
+import hibernate.SessionManager;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import view.MainWindowController;
 import view.UICommonController;
 
@@ -24,8 +27,14 @@ public class MainFX extends Application {
         stage.initModality(Modality.NONE);
         stage.setResizable(true);
         stage.setTitle("eStore - CapricornSoft Corporation");
-        
-        stage.show();  
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                SessionManager.getInstance().getSessionFactory().close();
+            }
+        });
+        stage.show();
     }
 
     public static void main(String[] args) {

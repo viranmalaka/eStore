@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="490.0" prefWidth="372.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SelectController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+   <children>
+      <Button layoutX="299.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnGO_onAction" prefHeight="30.0" prefWidth="57.0" text="Go">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <ChoiceBox fx:id="chbProperty" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="98.0" />
+      <TextField fx:id="txtSearch" layoutX="118.0" layoutY="14.0" onAction="#txtSearch_onAction">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <Button cancelButton="true" layoutX="232.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnCancle" text="Cancle">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button defaultButton="true" layoutX="299.0" layoutY="449.0" mnemonicParsing="false" onAction="#btnSelect" text="Select">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <TableView fx:id="list" layoutX="15.0" layoutY="52.0" onMouseClicked="#listClick" prefHeight="387.0" prefWidth="341.0">
+        <columns>
+          <TableColumn fx:id="clmID" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="clmName" prefWidth="265.0" text="Name" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

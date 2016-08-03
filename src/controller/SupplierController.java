@@ -67,7 +67,7 @@ public class SupplierController {
         return Long.parseLong(maxID + "") + 1;
     }
 
-    public static void openAddNewSupplierWindow() {
+    public static boolean  openAddNewSupplierWindow() {
         String newSupplierId = CommonControllers.convertIndex(getNextIndex(), 'S');
 
         FXMLLoader createFXML = UICommonController.getInstance().createFXML("suppliers/frmSupplier.fxml");
@@ -78,6 +78,7 @@ public class SupplierController {
         ((FrmSupplierController) createFXML.getController()).initData(newSupplierId);
 
         stage.showAndWait();
+        return ((FrmSupplierController) createFXML.getController()).isAdded();
     }
 
     public static void openEditSupplierWindow(String id) {
@@ -119,8 +120,7 @@ public class SupplierController {
 
     public static List<Supplier> getFilterdSupplier(PersonColumns personColumns, String arg) {
         SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
-        Session session = sessionFactory.openSession();
-        try {
+        try (Session session = sessionFactory.openSession()) {
             switch (personColumns) {
                 case Address:
                     return session.createCriteria(Supplier.class).add(Restrictions.like("address", "%" + arg + "%")).list();
@@ -135,17 +135,18 @@ public class SupplierController {
                 default:
                     return null;
             }
-        } finally {
-            session.close();
         }
     }
-    
-    public static void setSupInPurchaseOrder(FrmPurchaseOrderController controller, PersonColumns column, String arg){
-        Supplier get = getFilterdSupplier(column, arg).get(0);
-        controller.setSupplierValues(get.getSupplierID(), 
-                get.getFirstName() + " " + get.getLastName(),
-                get.getAddress(),
-                get.getTelephone());
+
+    public static void setSupInPurchaseOrder(FrmPurchaseOrderController controller, PersonColumns column, String arg) {
+        List<Supplier> list = getFilterdSupplier(column, arg);
+        if (list != null) {
+            Supplier get = list.get(0);
+            controller.setSupplierValues(get.getSupplierID(),
+                    get.getFirstName() + " " + get.getLastName(),
+                    get.getAddress(),
+                    get.getTelephone());
+        }
     }
 
     public static enum PersonColumns {
