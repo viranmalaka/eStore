@@ -125,11 +125,11 @@ public class ItemController {
 
     public static void setItemInPurchaseOrder(FrmPurchaseOrderController aThis, ItemColumns itemColumns, String text) {
         List<Item> list = getFilterdItem(itemColumns, text);
-        if (list != null) {
+        if (list != null && !list.isEmpty()) {
             Item get = list.get(0);
-            aThis.setItemValue(get.getItemID(),
-                    get.getName(),
-                    get.getScale().toString());
+                aThis.setItemValue(get.getItemID(),
+                        get.getName(),
+                        get.getScale().toString());
         }
     }
 
@@ -147,6 +147,10 @@ public class ItemController {
                     return null;
             }
         }
+    }
+
+    public static boolean matchItemValues(String id, String name) {
+        return getFilterdItem(ItemColumns.ItemID, id).get(0).getName().equals(name);
     }
 
     public static enum ItemColumns {

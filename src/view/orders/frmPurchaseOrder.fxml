@@ -269,13 +269,13 @@
    <center>
       <TableView fx:id="tblItems" minHeight="-Infinity" minWidth="-Infinity" prefHeight="78.0" prefWidth="675.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="52.0" text="Item ID" />
-          <TableColumn prefWidth="160.0" text="Name" />
-            <TableColumn prefWidth="85.0" text="Unit Price" />
-            <TableColumn prefWidth="83.0" text="Label Price" />
-            <TableColumn prefWidth="76.0" text="Qty" />
-            <TableColumn prefWidth="105.0" text="Purchase Price" />
-            <TableColumn maxWidth="286.0" prefWidth="111.0" text="Total" />
+          <TableColumn fx:id="colItemID" prefWidth="52.0" text="Item ID" />
+          <TableColumn fx:id="colName" prefWidth="160.0" text="Name" />
+            <TableColumn fx:id="colLablePrice" prefWidth="83.0" text="Label Price" />
+            <TableColumn fx:id="colExpDate" prefWidth="105.0" text="Exp Date" />
+            <TableColumn fx:id="colQty" prefWidth="76.0" text="Qty" />
+            <TableColumn fx:id="colUnitePrice" prefWidth="85.0" text="Unit Price" />
+            <TableColumn fx:id="colTotal" maxWidth="286.0" prefWidth="111.0" text="Total" />
         </columns>
          <BorderPane.margin>
             <Insets left="5.0" right="5.0" top="5.0" />

@@ -78,6 +78,7 @@ public class UICommonController {
 
         String EMPTY_FIELDS = "Following fields should not be empty";
         String INVALID_FORMATTINGS = "Following fields have invalid formattings";
+        String NEGETIVE_NUMBER = "Following fields should not be negetive values or zero";
     }
 
     public static interface CommonTitles {

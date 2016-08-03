@@ -5,30 +5,45 @@
  */
 package view.orders;
 
+import com.sun.webkit.UIClient;
 import controller.CommonControllers;
 import controller.ItemController;
 import controller.SupplierController;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
+import javax.net.ssl.SSLPeerUnverifiedException;
 import model.Item;
 import model.Supplier;
 import view.SelectController;
@@ -77,7 +92,7 @@ public class FrmPurchaseOrderController implements Initializable {
     @FXML
     private Button btnClose;
     @FXML
-    private TableView<?> tblItems;
+    private TableView<ItemTableRaw> tblItems;
     @FXML
     private TextField txtOrderID;
     @FXML
@@ -90,11 +105,28 @@ public class FrmPurchaseOrderController implements Initializable {
     private TextField txtPP;
     @FXML
     private TextField txtTP;
-//</editor-fold>
+    @FXML
+    private TableColumn<ItemTableRaw, String> colItemID;
+    @FXML
+    private TableColumn<ItemTableRaw, String> colName;
+    @FXML
+    private TableColumn<ItemTableRaw, Double> colUnitePrice;
+    @FXML
+    private TableColumn<ItemTableRaw, Double> colLablePrice;
+    @FXML
+    private TableColumn<ItemTableRaw, Double> colQty;
+    @FXML
+    private TableColumn<ItemTableRaw, Double> colTotal;
+    @FXML
+    private TableColumn<ItemTableRaw, String> colExpDate;
 
+//</editor-fold>
     /**
      * Initializes the controller class.
      */
+    private int editingID = -1;
+    private ObservableList<ItemTableRaw> itemsData = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -102,6 +134,15 @@ public class FrmPurchaseOrderController implements Initializable {
         txtPP.setTextFormatter(new TextFormatter<>(new NumberStringConverter("#.00")));
         txtLabelPrice.setTextFormatter(new TextFormatter<>(new NumberStringConverter("#.00")));
         txtTP.setTextFormatter(new TextFormatter<>(new NumberStringConverter("#.00")));
+
+        colExpDate.setCellValueFactory(new PropertyValueFactory<>("expDate"));
+        colItemID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colUnitePrice.setCellValueFactory(new PropertyValueFactory<>("up"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("tp"));
+        colLablePrice.setCellValueFactory(new PropertyValueFactory<>("labelPrice"));
+
     }
 //<editor-fold defaultstate="collapsed" desc="Selecting Supplier Codes">
 
@@ -195,14 +236,162 @@ public class FrmPurchaseOrderController implements Initializable {
 
     @FXML
     private void btnAdd_onAction(ActionEvent event) {
+        //item validating
+        switch (1) {
+            case 1:
+                //<editor-fold defaultstate="collapsed" desc="Validating">
+                String id = txtItemID.getText();
+                String name = txtItemName.getText();
+
+                String emptyFields = "";
+                if (id.equals("")) {
+                    emptyFields += "Item ID \n";
+                }
+                if (name.equals("")) {
+                    emptyFields += "Item name \n";
+                }
+                if (txtQty.getText().equals("")) {
+                    emptyFields += "Quantity \n";
+                }
+                if (txtPP.getText().equals("")) {
+                    emptyFields += "Unit Purchase Price \n";
+                }
+                if (txtTP.getText().equals("")) {
+                    emptyFields += "Total Purchase Price \n";
+                }
+                if (txtLabelPrice.getText().equals("")) {
+                    emptyFields += "Label Price \n";
+                }
+                if (!emptyFields.equals("")) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR,
+                            emptyFields,
+                            UICommonController.CommonTitles.FORMATTING_ERROR,
+                            UICommonController.CommonHeadding.EMPTY_FIELDS);
+                    break;
+                }
+
+                double qty = Double.parseDouble(txtQty.getText());
+                double up = Double.parseDouble(txtPP.getText());
+                double tp = Double.parseDouble(txtTP.getText());
+                double lp = Double.parseDouble(txtLabelPrice.getText());
+
+                if (!ItemController.matchItemValues(id, name)) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "", "Item ID and Name is not match");
+                    break;
+                }
+
+                String negetiveField = "";
+                if (qty <= 0) {
+                    negetiveField += "Quantity \n";
+                }
+                if (up <= 0) {
+                    negetiveField += "Unit Purchase Price\n";
+                }
+                if (tp <= 0) {
+                    negetiveField += "Total Purchase Price \n";
+                }
+                if (lp <= 0) {
+                    negetiveField += "Labled Price \n";
+                }
+                if (!negetiveField.equals("")) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR,
+                            negetiveField,
+                            UICommonController.CommonTitles.VALIDATING_ERROR,
+                            UICommonController.CommonHeadding.NEGETIVE_NUMBER);
+                    break;
+                }
+
+                LocalDate date = null;
+                if (dtpExpireDate.getValue() != null) {
+                    if (dtpExpireDate.getValue().isBefore(LocalDate.now())) {
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Expire Date is Passed", "");
+                        break;
+                    }
+                    date = dtpExpireDate.getValue();
+                }
+//</editor-fold>
+
+                //tring to adding or editing
+                if (editingID < 0) { // add new
+                    int hasID = -1;
+                    for (int i = 0; i < tblItems.getItems().size(); i++) {
+                        if (tblItems.getItems().get(i).getId().equals(id)) { // existing
+                            hasID = i;
+                            break;
+                        }
+                    }
+                    if (hasID < 0) { // add new Item 
+                        tblItems.getItems().add(new ItemTableRaw(id,
+                                name,
+                                date == null ? "" : date.toString(),
+                                qty,
+                                up,
+                                tp,
+                                lp));
+                    } else { // update current Index (hasID)
+                        Optional<ButtonType> reques = UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION,
+                                "Click 'Yes' to add this quantity to previous item.\n"
+                                + "Click 'No' to Override it.\n"
+                                + "Click 'Cancle' to cancle this adding",
+                                "Repeat Items",
+                                "This item is already in the list. \n"
+                                + "Do you want to add this quantity into it ?",
+                                ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                        if (reques.get() == ButtonType.YES) {
+                            ItemTableRaw itr = tblItems.getItems().get(hasID);
+                            itr.setExpDate(date == null ? "" : date.toString());
+                            itr.setLabelPrice(lp);
+                            itr.setName(name);
+                            itr.setQty(itr.getQty() + qty);
+                            itr.setTp(itr.getQty() * up);
+                            itr.setUp(up);
+                            tblItems.getItems().remove(hasID);
+                            tblItems.getItems().add(hasID, itr);
+                            tblItems.refresh();
+                            
+                        } else if (reques.get() == ButtonType.NO) {
+                            ItemTableRaw itr = tblItems.getItems().get(hasID);
+                            itr.setExpDate(date == null ? "" : date.toString());
+                            itr.setLabelPrice(lp);
+                            itr.setName(name);
+                            itr.setQty(qty);
+                            itr.setTp(tp);
+                            itr.setUp(up);
+                            tblItems.getItems().remove(hasID);
+                            tblItems.getItems().add(hasID, itr);
+                            tblItems.refresh();
+                        } // cancle
+                    }
+                    clearFields();
+                } else { // editing
+                    
+                }
+        }
+
     }
 
     @FXML
     private void btnCancle_onAction(ActionEvent event) {
+        if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "", "", "All entered data will be loss").get() == ButtonType.OK) {
+            clearFields();
+        }
+
+    }
+
+    private void clearFields() {
+        txtItemID.setText("");
+        txtItemName.setText("");
+        txtQty.setText("");
+        txtPP.setText("");
+        txtTP.setText("");
+        lblUnit.setText("");
+        txtLabelPrice.setText("");
+        dtpExpireDate.setValue(null);
     }
 
     @FXML
-    private void btnSaveOrder_onAction(ActionEvent event) {
+    private void btnSaveOrder_onAction(ActionEvent event
+    ) {
     }
 
     @FXML
@@ -267,9 +456,87 @@ public class FrmPurchaseOrderController implements Initializable {
             }
         } catch (NumberFormatException numberFormatException) {
         }
+
     }
 
     public class ItemTableRaw {
+
+        private final StringProperty id = new SimpleStringProperty("");
+        private final StringProperty name = new SimpleStringProperty("");
+        private final StringProperty expDate = new SimpleStringProperty("");
+        private final DoubleProperty qty = new SimpleDoubleProperty(0);
+        private final DoubleProperty up = new SimpleDoubleProperty(0);
+        private final DoubleProperty tp = new SimpleDoubleProperty(0);
+        private final DoubleProperty labelPrice = new SimpleDoubleProperty(0);
+
+        public ItemTableRaw() {
+        }
+
+        public ItemTableRaw(String id, String name, String expData, double qty, double up, double tp, double lp) {
+            this.setExpDate(expData);
+            this.setId(id);
+            this.setLabelPrice(lp);
+            this.setName(name);
+            this.setQty(qty);
+            this.setTp(tp);
+            this.setUp(up);
+        }
+
+        public String getId() {
+            return id.get();
+        }
+
+        public void setId(String id) {
+            this.id.set(id);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public String getExpDate() {
+            return expDate.get();
+        }
+
+        public void setExpDate(String expDate) {
+            this.expDate.set(expDate);
+        }
+
+        public Double getQty() {
+            return qty.get();
+        }
+
+        public void setQty(Double qty) {
+            this.qty.set(qty);
+        }
+
+        public Double getUp() {
+            return up.get();
+        }
+
+        public void setUp(Double up) {
+            this.up.set(up);
+        }
+
+        public Double getTp() {
+            return tp.get();
+        }
+
+        public void setTp(Double tp) {
+            this.tp.set(tp);
+        }
+
+        public Double getLabelPrice() {
+            return labelPrice.get();
+        }
+
+        public void setLabelPrice(Double labelPrice) {
+            this.labelPrice.set(labelPrice);
+        }
 
     }
 }
