@@ -103,9 +103,9 @@ public class FrmSupplierController implements Initializable {
                 }
                 if (hasEmpty) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            emptyItems,
+                            UICommonController.CommonHeadding.EMPTY_FIELDS,
                             UICommonController.CommonTitles.VALIDATING_ERROR,
-                            UICommonController.CommonHeadding.EMPTY_FIELDS);
+                            emptyItems);
                     break;
                 }
 
@@ -126,16 +126,16 @@ public class FrmSupplierController implements Initializable {
 
                 if (hasErrorFormatting) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            errorFormatting,
+                            UICommonController.CommonHeadding.INVALID_FORMATTINGS,
                             UICommonController.CommonTitles.FORMATTING_ERROR,
-                            UICommonController.CommonHeadding.INVALID_FORMATTINGS);
+                            errorFormatting);
                     break;
                 }
 
                 if (foredit) {
                     boolean updateSupplier = SupplierController.updateSupplier(sId, fname, lname, address, tp);
                     if (!updateSupplier) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Supplier is not Updated Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Supplier is not Updated Successfully","Error");
                         LogController.log(Level.ERROR, "Supplier Updating is not done.");
                         added = false;
                     } else {
@@ -148,7 +148,7 @@ public class FrmSupplierController implements Initializable {
                     // adding new supplier
                     boolean saveSupplier = SupplierController.saveSupplier(sId, fname, lname, address, tp);
                     if (!saveSupplier) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Supplier is not Saved Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Supplier is not Saved Successfully","");
                         LogController.log(Level.ERROR, "Supplier Saving is not done.");
                         added = false;
                     } else {

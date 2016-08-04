@@ -101,9 +101,10 @@ public class FrmCustomerController implements Initializable {
                 }
                 if (hasEmpty) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            emptyItems,
+                            UICommonController.CommonHeadding.EMPTY_FIELDS,
                             UICommonController.CommonTitles.VALIDATING_ERROR,
-                            UICommonController.CommonHeadding.EMPTY_FIELDS);
+                            emptyItems
+                    );
                     break;
                 }
 
@@ -124,16 +125,17 @@ public class FrmCustomerController implements Initializable {
 
                 if (hasErrorFormatting) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            errorFormatting,
+                            UICommonController.CommonHeadding.INVALID_FORMATTINGS,
                             UICommonController.CommonTitles.FORMATTING_ERROR,
-                            UICommonController.CommonHeadding.INVALID_FORMATTINGS);
+                            errorFormatting
+                    );
                     break;
                 }
 
                 if (forEdit) {
                     boolean updateCustomer = CustomersController.updateCustomer(cId, fname, lname, address, tp);
                     if (!updateCustomer) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Updated Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Customer is not Updated Successfully","Error");
                         LogController.log(Level.ERROR, "Customer Updating is not done.");
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Updated Successfully", "");
@@ -144,7 +146,7 @@ public class FrmCustomerController implements Initializable {
                     // adding new customer
                     boolean saveCustomer = CustomersController.saveCustomer(cId, fname, lname, address, tp);
                     if (!saveCustomer) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Customer is not Saved Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR,  "Customer is not Saved Successfully","Error");
                         LogController.log(Level.ERROR, "Customer Saving is not done.");
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Saved Successfully", "");

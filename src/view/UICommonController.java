@@ -54,15 +54,15 @@ public class UICommonController {
 
 //<editor-fold defaultstate="collapsed" desc="Dialog Box Things">
 
-    public static Optional<ButtonType> showAlertBox(AlertType type, String msg, String title, String hedder, ButtonType... elements) {
+    public static Optional<ButtonType> showAlertBox(AlertType type, String headder, String title, String subString, ButtonType... elements) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
-        alert.setHeaderText(hedder);
+        alert.setHeaderText(headder);
         if (elements != null) {
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(elements);
         }
-        alert.setContentText(msg);
+        alert.setContentText(subString);
         return alert.showAndWait();
     }
 

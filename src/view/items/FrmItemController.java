@@ -77,24 +77,25 @@ public class FrmItemController implements Initializable {
 
                 if (!emptyItem.equals("")) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            emptyItem,
+                            UICommonController.CommonHeadding.EMPTY_FIELDS,
                             UICommonController.CommonTitles.VALIDATING_ERROR,
-                            UICommonController.CommonHeadding.EMPTY_FIELDS);
+                            emptyItem);
                     break;
                 }
 
                 if (!CommonControllers.isName(name)) {
                     UICommonController.showAlertBox(Alert.AlertType.ERROR,
-                            String.format("'%s' is not a name \n", name),
+                            UICommonController.CommonHeadding.INVALID_FORMATTINGS,
                             UICommonController.CommonTitles.FORMATTING_ERROR,
-                            UICommonController.CommonHeadding.INVALID_FORMATTINGS);
+                            String.format("'%s' is not a name \n", name)
+                    );
                     break;
                 }
 
                 if (forEdit) {
                     boolean updateItem = ItemController.updateItem(id, name, Item.Units.valueOf(scale));
                     if (!updateItem) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Item is not Updated Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR,  "Item is not Updated Successfully","Error");
                         LogController.log(Level.ERROR, "Item Updating is not done.");
                         added = false;
                     } else {
@@ -106,7 +107,7 @@ public class FrmItemController implements Initializable {
                 }else{
                     boolean saveItem = ItemController.saveItem(id, name, Item.Units.valueOf(scale));
                     if (!saveItem) {
-                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Error", "Item is not Saved Successfully");
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR,  "Item is not Saved Successfully", "Error");
                         LogController.log(Level.ERROR, "Item Saving is not done.");
                         added = false;
                     } else {

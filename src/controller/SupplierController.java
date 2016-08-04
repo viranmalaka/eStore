@@ -149,6 +149,14 @@ public class SupplierController {
         }
     }
 
+    public static boolean matchSupplierValues(String text, String text0) {
+        Supplier get = getFilterdSupplier(PersonColumns.SupplierID, text).get(0);
+        if (text0.equals(get.getFirstName() + " " + get.getLastName())) {
+            return true;
+        }
+        return false;
+    }
+
     public static enum PersonColumns {
         SupplierID, Name, Address, Telephone
     };
