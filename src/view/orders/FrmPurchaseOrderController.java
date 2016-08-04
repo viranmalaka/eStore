@@ -8,18 +8,23 @@ package view.orders;
 import com.sun.webkit.UIClient;
 import controller.CommonControllers;
 import controller.ItemController;
+import controller.PurchaseOrderController;
 import controller.SupplierController;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -125,7 +130,7 @@ public class FrmPurchaseOrderController implements Initializable {
      * Initializes the controller class.
      */
     private int editingID = -1;
-    private ObservableList<ItemTableRaw> itemsData = FXCollections.observableArrayList();
+    private double total;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,9 +148,28 @@ public class FrmPurchaseOrderController implements Initializable {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("tp"));
         colLablePrice.setCellValueFactory(new PropertyValueFactory<>("labelPrice"));
 
+        tblItems.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends ItemTableRaw> obs, ItemTableRaw oldSelection, ItemTableRaw newSelection) -> {
+            try {
+                if (newSelection != null) {
+                    editingID = tblItems.getSelectionModel().getSelectedIndex();
+                    ItemController.setItemInPurchaseOrder(this, ItemController.ItemColumns.ItemID, newSelection.getId());
+                    txtQty.setText(String.valueOf(newSelection.getQty()));
+                    txtPP.setText(String.valueOf(newSelection.getUp()));
+                    txtTP.setText(String.valueOf(newSelection.getTp()));
+                    txtLabelPrice.setText(String.valueOf(newSelection.getLabelPrice()));
+                    if (newSelection.getExpDate().equals("")) {
+                        dtpExpireDate.setValue(null);
+                    } else {
+                        dtpExpireDate.setValue(LocalDate.parse(newSelection.getExpDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    }
+                    btnAdd.setText("Edit");
+                }
+            } catch (Exception e) {
+            }
+        });
     }
-//<editor-fold defaultstate="collapsed" desc="Selecting Supplier Codes">
 
+//<editor-fold defaultstate="collapsed" desc="Selecting Supplier Codes">
     @FXML
     private void btnSupplierSearch_onAction(ActionEvent event) {
         FXMLLoader createFXML = UICommonController.getInstance().createFXML("Select.fxml");
@@ -232,6 +256,13 @@ public class FrmPurchaseOrderController implements Initializable {
 
     @FXML
     private void btnRemove_onAction(ActionEvent event) {
+        if (editingID > -1) {
+            updateTotal(-1 * tblItems.getItems().get(editingID).getTp());
+            tblItems.getItems().remove(editingID);
+            tblItems.refresh();
+            editingID = -1;
+            clearFields();
+        }
     }
 
     @FXML
@@ -313,6 +344,7 @@ public class FrmPurchaseOrderController implements Initializable {
 
                 //tring to adding or editing
                 if (editingID < 0) { // add new
+                    //<editor-fold defaultstate="collapsed" desc="Add New Entry">
                     int hasID = -1;
                     for (int i = 0; i < tblItems.getItems().size(); i++) {
                         if (tblItems.getItems().get(i).getId().equals(id)) { // existing
@@ -320,7 +352,7 @@ public class FrmPurchaseOrderController implements Initializable {
                             break;
                         }
                     }
-                    if (hasID < 0) { // add new Item 
+                    if (hasID < 0) { // add new Item
                         tblItems.getItems().add(new ItemTableRaw(id,
                                 name,
                                 date == null ? "" : date.toString(),
@@ -328,6 +360,7 @@ public class FrmPurchaseOrderController implements Initializable {
                                 up,
                                 tp,
                                 lp));
+                        updateTotal(tp);
                     } else { // update current Index (hasID)
                         Optional<ButtonType> reques = UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION,
                                 "Click 'Yes' to add this quantity to previous item.\n"
@@ -342,38 +375,58 @@ public class FrmPurchaseOrderController implements Initializable {
                             itr.setExpDate(date == null ? "" : date.toString());
                             itr.setLabelPrice(lp);
                             itr.setName(name);
+                            updateTotal(-1 * itr.getTp());
                             itr.setQty(itr.getQty() + qty);
                             itr.setTp(itr.getQty() * up);
                             itr.setUp(up);
                             tblItems.getItems().remove(hasID);
                             tblItems.getItems().add(hasID, itr);
+                            updateTotal(itr.getTp());
                             tblItems.refresh();
-                            
+
                         } else if (reques.get() == ButtonType.NO) {
                             ItemTableRaw itr = tblItems.getItems().get(hasID);
                             itr.setExpDate(date == null ? "" : date.toString());
                             itr.setLabelPrice(lp);
                             itr.setName(name);
                             itr.setQty(qty);
+                            updateTotal(-1 * itr.getTp());
                             itr.setTp(tp);
+                            updateTotal(tp);
                             itr.setUp(up);
                             tblItems.getItems().remove(hasID);
                             tblItems.getItems().add(hasID, itr);
                             tblItems.refresh();
                         } // cancle
                     }
-                    clearFields();
+//</editor-fold>
                 } else { // editing
-                    
+                    tblItems.getItems().get(editingID).setId(id);
+                    tblItems.getItems().get(editingID).setExpDate(date == null ? "" : date.toString());
+                    tblItems.getItems().get(editingID).setLabelPrice(lp);
+                    tblItems.getItems().get(editingID).setName(name);
+                    updateTotal(-1 * tblItems.getItems().get(editingID).getTp());
+                    tblItems.getItems().get(editingID).setTp(tp);
+                    tblItems.getItems().get(editingID).setQty(qty);
+                    tblItems.getItems().get(editingID).setUp(up);
+                    tblItems.refresh();
+                    updateTotal(tp);
+                    editingID = -1;
                 }
+                clearFields();
         }
 
     }
 
     @FXML
     private void btnCancle_onAction(ActionEvent event) {
-        if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "", "", "All entered data will be loss").get() == ButtonType.OK) {
+        if (editingID < 0) {
+            if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "", "", "All entered data will be loss").get() == ButtonType.OK) {
+                clearFields();
+            }
+        } else if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "", "", "Are You sure to quit editing the entry").get() == ButtonType.OK) {
             clearFields();
+            editingID = -1;
         }
 
     }
@@ -387,11 +440,30 @@ public class FrmPurchaseOrderController implements Initializable {
         lblUnit.setText("");
         txtLabelPrice.setText("");
         dtpExpireDate.setValue(null);
+        btnAdd.setText("Add");
+        tblItems.getSelectionModel().clearSelection();
     }
 
     @FXML
-    private void btnSaveOrder_onAction(ActionEvent event
-    ) {
+    private void btnSaveOrder_onAction(ActionEvent event) {
+        //add validationg for supplier
+        
+        
+        PurchaseOrderController poc = new PurchaseOrderController();
+        boolean pre1 = poc.createNewPurchaseOrder(txtOrderID.getText(), 
+                Date.from(dtpOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                txtSupplierID.getText(),chkPaid.isSelected(),total
+        );
+        
+        boolean pre2 = true;
+        for (ItemTableRaw item : tblItems.getItems()) {
+            pre2 = poc.addItemsToPurchaseOrder(pre1, item.getId(),item.getQty(), item.getUp(), item.getLabelPrice(), item.getExpDate()) & pre2;
+        }
+        
+        boolean res = poc.saveOrder(pre1 & pre2);
+        if (res) {
+            System.out.println("done");
+        }
     }
 
     @FXML
@@ -457,6 +529,11 @@ public class FrmPurchaseOrderController implements Initializable {
         } catch (NumberFormatException numberFormatException) {
         }
 
+    }
+
+    private void updateTotal(double num) {
+        this.total += num;
+        lblTotal.setText("Total : " + String.valueOf(total));
     }
 
     public class ItemTableRaw {

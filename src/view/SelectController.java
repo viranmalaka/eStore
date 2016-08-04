@@ -152,7 +152,7 @@ public class SelectController implements Initializable {
     private void setValue(String id){
         if (findingClass == Supplier.class) {
             controller.setSupplierValues(id, "", "", "");
-        }else if(findingClass == Customer.class){
+        }else if(findingClass == Item.class){
             controller.setItemValue(id, "", "");
         }else if(findingClass == Item.class){
             
