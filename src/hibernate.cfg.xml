@@ -22,6 +22,8 @@
         	create - remove all previouse tabels and create or recreate the all
         	update - keep prevouse and add new 
         -->
+    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  
     <property name="hbm2ddl.auto">update</property>
     <!-- Echo all executed SQL to stdout 
 	    	do we want to print the executed sql queries?

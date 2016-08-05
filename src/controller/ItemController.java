@@ -12,11 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Item;
+import model.PurchaseOrderItem;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import view.MainWindowController;
 import view.UICommonController;
 import view.items.FrmItemController;
@@ -108,16 +111,47 @@ public class ItemController {
 
     public static void refreshTable(MainWindowController controller, ItemColumns itemColumns, String arg) {
         List<Item> list = getFilterdItem(itemColumns, arg);
+        Session session = SessionManager.getInstance().getSessionFactory().openSession();
+        session.beginTransaction();
+
         if (list != null && list.size() > 0) {
             for (Item item : list) {
-                controller.tblItemAddItem(item.getItemID(),
-                        item.getName(),
-                        item.getScale().toString(),
-                        item.getQuantity(),
-                        item.getExpDate() == null ? "" : item.getExpDate().toString(),
-                        item.getLastPurchasePrice(),
-                        item.getSellingPrice(),
-                        item.getLastSupplier() == null ? "" : item.getLastSupplier().getSupplierID());
+
+                /*PurchaseOrderItem get = (PurchaseOrderItem) session.createCriteria(PurchaseOrderItem.class)
+                .add(Restrictions.eq("", item.getId()))
+                .addOrder(Order.desc("id")).list().get(1);*/
+                Query q = session.createQuery("from PurchaseOrderItem where item_id='" + item.getItemID() + "'");
+                List<PurchaseOrderItem> getList = q.list();
+                PurchaseOrderItem get;
+                try {
+                    get = getList.get(1);
+                } catch (IndexOutOfBoundsException | NullPointerException e) {
+                    // null or empty list
+                    get = null;
+                }
+                Object remainQty = session.createQuery("select sum(remainQty) from PurchaseOrderItem where item_id='" + item.getId()+ "'").uniqueResult();
+                
+                if (get != null) {
+                    controller.tblItemAddItem(item.getItemID(),
+                            item.getName(),
+                            item.getScale().toString(),
+                            (double)(remainQty == null ? 0 : remainQty),
+                            get.getExpDate() == null ? "" : get.getExpDate().toString(),
+                            get.getPurchasePrice(),
+                            get.getLabeledSellingPrice(),
+                            get.getPurchaseOrder().getSupplier() == null ? "" : get.getPurchaseOrder().getSupplier().getSupplierID()
+                    );
+                } else {
+                    controller.tblItemAddItem(item.getItemID(),
+                            item.getName(),
+                            item.getScale().toString(),
+                            (double)(remainQty == null ? 0.0 : remainQty),
+                            "",
+                            0,
+                            0,
+                            "");
+                }
+
             }
         }
         controller.tblItemSetItems();
@@ -127,13 +161,13 @@ public class ItemController {
         List<Item> list = getFilterdItem(itemColumns, text);
         if (list != null && !list.isEmpty()) {
             Item get = list.get(0);
-                aThis.setItemValue(get.getItemID(),
-                        get.getName(),
-                        get.getScale().toString());
+            aThis.setItemValue(get.getItemID(),
+                    get.getName(),
+                    get.getScale().toString());
         }
     }
 
-    public  static List<Item> getFilterdItem(ItemColumns itemColumns, String arg) {
+    public static List<Item> getFilterdItem(ItemColumns itemColumns, String arg) {
         SessionFactory sessionFactory = SessionManager.getInstance().getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             switch (itemColumns) {

@@ -141,6 +141,7 @@ public class FrmItemController implements Initializable {
 
     public void initData(String itemID, String name, String scale) { // for edit
         forEdit = true;
+        txtItmID.setText(itemID);
         lblTitle.setText("Edit Item");
         txtItmName.setText(name);
         cmbItmUnit.getSelectionModel().select(scale);

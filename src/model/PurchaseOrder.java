@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,17 +30,16 @@ public class PurchaseOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(length = 7,nullable = false,unique = true, updatable = false)
+    @Column(length = 7, nullable = false, unique = true, updatable = false)
     private String purchaseOrderID;
     @Temporal(TemporalType.DATE)
     private Date date;
     private boolean paid;
-    private double total;
 
     @OneToOne
     Supplier supplier;
-    
-    @OneToMany(mappedBy = "purchaseOrder",cascade = CascadeType.PERSIST)
+
+    @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<PurchaseOrderItem> items = new ArrayList<>();
 
     public long getId() {
@@ -60,14 +60,6 @@ public class PurchaseOrder {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public List<PurchaseOrderItem> getItems() {
@@ -93,6 +85,17 @@ public class PurchaseOrder {
     public void setPurchaseOrderID(String purchaseOrderID) {
         this.purchaseOrderID = purchaseOrderID;
     }
-    
-    
+
+    public void clearItems() {
+        items = new ArrayList<>();
+    }
+
+    public double getTotal() {
+        double total = 0;
+        for (PurchaseOrderItem item : items) {
+            total += item.getQty() * item.getPurchasePrice();
+        }
+        return total;
+    }
+
 }

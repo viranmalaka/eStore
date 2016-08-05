@@ -16,6 +16,7 @@ import model.Supplier;
 import org.hibernate.Session;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.PortableServer.POA;
 
 /**
  *
@@ -54,14 +55,8 @@ public class HibernateControllerTest {
         obj.setSupplier(s.get(Supplier.class, 2L));
         obj.setPaid(true);
         obj.setPurchaseOrderID("P00010");
-        obj.setTotal(152);
 
         Item get = s.get(Item.class, 3L);
-        get.setQuantity(get.getQuantity() + 100);
-        get.setLastSupplier(obj.getSupplier());
-        get.setExpDate(new Date());
-        get.setSellingPrice(150);
-        get.setLastPurchasePrice(140);
         //s.update(get);
 
         PurchaseOrderItem e = new PurchaseOrderItem();
@@ -74,11 +69,6 @@ public class HibernateControllerTest {
         e.setExpDate(new Date());
 
         Item get1 = s.get(Item.class, 4L);
-        get1.setQuantity(get1.getQuantity() + 200);
-        get1.setLastSupplier(obj.getSupplier());
-        get1.setExpDate(new Date());
-        get1.setSellingPrice(250);
-        get1.setLastPurchasePrice(240);
         //s.update(get1);
 
         PurchaseOrderItem e1 = new PurchaseOrderItem();
@@ -103,18 +93,18 @@ public class HibernateControllerTest {
 
     @Test
     public void testUpdatingObject() {
-        System.out.println("update a customer");
+        System.out.println("update a purchase order");
 
         Session s = SessionManager.getInstance().getSessionFactory().openSession();
         s.beginTransaction();
-
-        Customer get = s.get(Customer.class, 2L);
         
-        get.setAddress("This is updated address");
+        PurchaseOrder p = (PurchaseOrder)s.get(PurchaseOrder.class, 11L);
         
-        s.update(get);
+        for (PurchaseOrderItem item : p.getItems()) {
+            System.out.println(item);
+        }
+        p.getItems().remove(0);
         
-                
         s.getTransaction().commit();
         s.close();
         

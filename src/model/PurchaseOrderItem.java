@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -32,6 +34,7 @@ public class PurchaseOrderItem {
     private double remainQty;
     private double purchasePrice;
     private double labeledSellingPrice;
+    @Temporal(TemporalType.DATE)
     private Date expDate;
 
     public long getId() {

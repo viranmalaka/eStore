@@ -36,10 +36,9 @@ public class SaleOrder {
     private Customer customer;
     
     private float overrollDiscount;
-    private double Total;
     private boolean paid;
     
-    @OneToMany(mappedBy ="saleOrder", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy ="saleOrder", cascade = CascadeType.ALL)
     private List<SaleOrderItem> items = new ArrayList<>();
 
     public long getId() {
@@ -78,13 +77,6 @@ public class SaleOrder {
         this.overrollDiscount = overrollDiscount;
     }
 
-    public double getTotal() {
-        return Total;
-    }
-
-    public void setTotal(double Total) {
-        this.Total = Total;
-    }
 
     public boolean isPaid() {
         return paid;

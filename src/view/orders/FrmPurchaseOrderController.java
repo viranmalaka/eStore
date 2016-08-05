@@ -21,6 +21,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,8 +41,11 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
+import logger.LogController;
 import model.Item;
 import model.Supplier;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import view.SelectController;
 import view.UICommonController;
 
@@ -120,6 +124,7 @@ public class FrmPurchaseOrderController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private boolean orderEditing = false;
     private int editingID = -1;
     private double total;
 
@@ -299,7 +304,11 @@ public class FrmPurchaseOrderController implements Initializable {
                 double lp = Double.parseDouble(txtLabelPrice.getText());
 
                 if (!ItemController.matchItemValues(id, name)) {
-                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Item ID and Name are not match","");
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Item ID and Name are not match", "");
+                    break;
+                }
+                if (tp != qty * up) {
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Product of Quantity and Unit Price is not equal to Total", "");
                     break;
                 }
 
@@ -413,10 +422,10 @@ public class FrmPurchaseOrderController implements Initializable {
     @FXML
     private void btnCancle_onAction(ActionEvent event) {
         if (editingID < 0) {
-            if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "All entered data will be loss","").get() == ButtonType.OK) {
+            if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "All entered data will be loss", "").get() == ButtonType.OK) {
                 clearFields();
             }
-        } else if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "Are You sure to quit editing the entry","").get() == ButtonType.OK) {
+        } else if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "Are You sure to quit editing the entry", "").get() == ButtonType.OK) {
             clearFields();
             editingID = -1;
         }
@@ -442,42 +451,93 @@ public class FrmPurchaseOrderController implements Initializable {
         switch (1) {
             case 1:
                 if (!SupplierController.matchSupplierValues(txtSupplierID.getText(), txtSupplierName.getText())) {
-                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Supplier ID and Name are not match","");
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "Supplier ID and Name are not match", "");
                     txtSupplierID.requestFocus();
                     break;
                 }
                 if (tblItems.getItems().isEmpty()) {
-                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "There are no any items in the order","", "You should add at least one item");
+                    UICommonController.showAlertBox(Alert.AlertType.ERROR, "There are no any items in the order", "", "You should add at least one item");
                     break;
                 }
 
+                // saving
                 PurchaseOrderController poc = new PurchaseOrderController();
-                boolean pre1 = poc.createNewPurchaseOrder(txtOrderID.getText(),
-                        Date.from(dtpOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                        txtSupplierID.getText(), chkPaid.isSelected(), total
-                );
+                if (!orderEditing) {
+                    boolean pre1 = poc.createNewPurchaseOrder(txtOrderID.getText(),
+                            Date.from(dtpOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            txtSupplierID.getText(), chkPaid.isSelected(), total
+                    );
 
-                boolean pre2 = true;
-                for (ItemTableRaw item : tblItems.getItems()) {
-                    pre2 = poc.addItemsToPurchaseOrder(pre1, item.getId(), item.getQty(), item.getUp(), item.getLabelPrice(), item.getExpDate()) & pre2;
-                }
+                    boolean pre2 = true;
+                    for (ItemTableRaw item : tblItems.getItems()) {
+                        pre2 = poc.addItemsToPurchaseOrder(pre1, item.getId(), item.getQty(), item.getUp(), item.getLabelPrice(), item.getExpDate()) & pre2;
+                    }
 
-                boolean res = poc.saveOrder(pre1 & pre2);
-                if (res) {
-                    System.out.println("done");
+                    boolean res = poc.saveOrder(pre1 & pre2);
+                    if (res) {
+                        UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Saving Successfully", "");
+                        LogController.log(Level.INFO, "Add new Purchase Order -> " + txtOrderID.getText());
+                        ((Stage)tblItems.getScene().getWindow()).close();
+                    }else{
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Saving is not Successfully", "");
+                        LogController.log(Level.INFO, "Error Add new Purchase Order -> " + txtOrderID.getText());
+                    }
+                } else {
+                    boolean pre1 = poc.editPurchaseOrder(txtOrderID.getText(),
+                            Date.from(dtpOrderDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            txtSupplierID.getText(), chkPaid.isSelected(), total
+                    );
+                    
+                    boolean pre2 = true;
+                    
+                    for (ItemTableRaw item : tblItems.getItems()) {
+                        pre2 = poc.addItemsToPurchaseOrder(pre1, item.getId(), item.getQty(), item.getUp(), item.getLabelPrice(), item.getExpDate()) & pre2;
+                    }
+                    
+                    boolean res = poc.saveOrder(pre1 & pre2);
+                    if (res) {
+                        UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Updating Successfully", "");
+                        LogController.log(Level.INFO, "Update Purchase Order -> " + txtOrderID.getText());;
+                        ((Stage)tblItems.getScene().getWindow()).close();
+                    }else{
+                        UICommonController.showAlertBox(Alert.AlertType.ERROR, "Saving is not Successfully", "");
+                        LogController.log(Level.INFO, "Error eding Purchase Order -> " + txtOrderID.getText());
+                    }
                 }
         }
     }
 
     @FXML
     private void btnClose_onAction(ActionEvent event) {
+        if (UICommonController.showAlertBox(Alert.AlertType.CONFIRMATION, "Do you want to close ? \nAll entered data will be loss", "", "", ButtonType.YES, ButtonType.NO).get().equals(ButtonType.YES)) {
+            ((Stage) btnClose.getScene().getWindow()).close();
+        }
+    }
+
+    public void initData(String purchaseOrderID, Date date, String supplierID, String name, boolean paid, double total) {
+        //editing
+        txtOrderID.setText(purchaseOrderID);
+        dtpOrderDate.setValue(LocalDate.parse(date.toString()));
+        txtSupplierID.setText(supplierID);
+        txtSupplierName.setText(name);
+        chkPaid.setSelected(paid);
+        updateTotal(total);
+        orderEditing = true;
+    }
+
+    public void fillTableItems(String id, String name, Date expDate, double qty, double up, double lp) {
+        tblItems.getItems().add(new ItemTableRaw(id, name, 
+                expDate == null ? "" : expDate.toString(),
+                qty, up, qty * up, lp));
     }
 
     public void initData(String newPOId) { // create
         txtOrderID.setText(newPOId);
         dtpOrderDate.setValue(LocalDate.now());
+        orderEditing = false;
     }
 
+//<editor-fold defaultstate="collapsed" desc="Automatic calculation">
     @FXML
     private void txtQty_type(KeyEvent event) {
         try {
@@ -486,8 +546,8 @@ public class FrmPurchaseOrderController implements Initializable {
             double q = Double.parseDouble(txtQty.getText());
 
             if (!up.equals("") && !tp.equals("")) {
-                txtTP.setText(String.valueOf(Double.parseDouble(txtPP.getText()) * q));
             } else if (!up.equals("") && tp.equals("")) {
+                txtTP.setText(String.valueOf(Double.parseDouble(txtPP.getText()) * q));
                 txtTP.setText(String.valueOf(Double.parseDouble(txtPP.getText()) * q));
             } else if (up.equals("") && !tp.equals("")) {
                 txtPP.setText(String.valueOf(Double.parseDouble(txtTP.getText()) / q));
@@ -533,6 +593,7 @@ public class FrmPurchaseOrderController implements Initializable {
         }
 
     }
+//</editor-fold>
 
     private void updateTotal(double num) {
         this.total += num;

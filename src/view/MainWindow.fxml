@@ -168,14 +168,11 @@
                      <center>
                         <TableView fx:id="tblOrders" prefHeight="329.0" prefWidth="545.0" BorderPane.alignment="CENTER">
                            <columns>
-                              <TableColumn fx:id="itmIDColumn1" prefWidth="58.0" text="Item ID" />
-                              <TableColumn fx:id="itmNameColumn1" prefWidth="117.0" text="Name" />
-                              <TableColumn fx:id="ItmQtyColumn1" prefWidth="52.0" text="Qty" />
-                              <TableColumn fx:id="itmScaleColumn1" prefWidth="42.0" text="Scale" />
-                              <TableColumn fx:id="itmLastSupColumn1" text="Last Supplier" />
-                              <TableColumn fx:id="itmExpDateColumn1" prefWidth="62.0" text="Exp Date" />
-                              <TableColumn fx:id="itmLPPriceColumn1" prefWidth="67.0" text="Last Purchase Price" />
-                              <TableColumn fx:id="itmPriceColumn1" prefWidth="67.0" text="Price" />
+                              <TableColumn fx:id="pOrderID" prefWidth="58.0" text="Order ID" />
+                              <TableColumn fx:id="pOrderSID" prefWidth="117.0" text="Supplier ID" />
+                              <TableColumn fx:id="pOrderDate" prefWidth="52.0" text="Date" />
+                              <TableColumn fx:id="pOrderPaid" text="Paid" />
+                              <TableColumn fx:id="pOrderTotal" prefWidth="62.0" text="Total" />
                            </columns>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -193,7 +190,7 @@
                                     <Insets left="5.0" />
                                  </FlowPane.margin>
                               </ChoiceBox>
-                              <TextField fx:id="txtPOSearch" onAction="#txtItmSearch_Action">
+                              <TextField fx:id="txtPOSearch" onAction="#txtpOrderSearch_Action">
                                  <FlowPane.margin>
                                     <Insets left="5.0" />
                                  </FlowPane.margin>

@@ -11,8 +11,11 @@ import controller.PurchaseOrderController;
 import controller.SupplierController;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -30,7 +33,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Customer;
 
 /**
  * FXML Controller class
@@ -102,36 +104,33 @@ public class MainWindowController implements Initializable {
     private TableColumn<ItemTableRow, Double> itmPriceColumn;
     @FXML
     private TableColumn<ItemTableRow, String> itmIDColumn;
+    @FXML
+    private ChoiceBox<String> cmbPOSearchItem;
+    @FXML
+    private TextField txtPOSearch;
+    @FXML
+    private TableView<POrderTableRow> tblOrders;
+    @FXML
+    private TableColumn<POrderTableRow, String> pOrderID;
+    @FXML
+    private TableColumn<POrderTableRow, String> pOrderSID;
+    @FXML
+    private TableColumn<POrderTableRow, String> pOrderDate;
+    @FXML
+    private TableColumn<POrderTableRow, Boolean> pOrderPaid;
+    @FXML
+    private TableColumn<POrderTableRow, Double> pOrderTotal;
 
 //</editor-fold>
     private int cmbSupSelectedIndex;
     private int cmbCusSelectedIndex;
     private int cmbItmSelectedIndex;
+    private int cmbPOrderSelectedIndex;
+
     private ObservableList<PersonTableRow> cusData = FXCollections.observableArrayList();
     private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
     private ObservableList<ItemTableRow> itmData = FXCollections.observableArrayList();
-    @FXML
-    private ChoiceBox<?> cmbPOSearchItem;
-    @FXML
-    private TextField txtPOSearch;
-    @FXML
-    private TableView<?> tblOrders;
-    @FXML
-    private TableColumn<?, ?> itmIDColumn1;
-    @FXML
-    private TableColumn<?, ?> itmNameColumn1;
-    @FXML
-    private TableColumn<?, ?> ItmQtyColumn1;
-    @FXML
-    private TableColumn<?, ?> itmScaleColumn1;
-    @FXML
-    private TableColumn<?, ?> itmLastSupColumn1;
-    @FXML
-    private TableColumn<?, ?> itmExpDateColumn1;
-    @FXML
-    private TableColumn<?, ?> itmLPPriceColumn1;
-    @FXML
-    private TableColumn<?, ?> itmPriceColumn1;
+    private ObservableList<POrderTableRow> pOrderData = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -161,10 +160,17 @@ public class MainWindowController implements Initializable {
                 add("Last Supplier");
             }
         }));
+        cmbPOSearchItem.setItems(FXCollections.observableList(new ArrayList<String>() {
+            {
+                add("Order ID");
+                add("Supplier");
+            }
+        }));
 
         cmbCusSearchItem.getSelectionModel().select(0);
         cmbSupSearchItem.getSelectionModel().select(0);
         cmbItmSearchItem.getSelectionModel().select(0);
+        cmbPOSearchItem.getSelectionModel().select(0);
 
         cmbCusSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             cmbCusSelectedIndex = newValue.intValue();
@@ -175,10 +181,14 @@ public class MainWindowController implements Initializable {
         cmbItmSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             cmbItmSelectedIndex = newValue.intValue();
         });
+        cmbPOSearchItem.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            cmbPOrderSelectedIndex = newValue.intValue();
+        });
 
         initCustomerTable();
         initSupplierTable();
         initItemTable();
+        initPOrderTable();
     }
 
     @FXML
@@ -192,15 +202,14 @@ public class MainWindowController implements Initializable {
                 SupplierController.openAddNewSupplierWindow();
                 btnSupReset_onAction(event);
                 break;
-            case 2:
+            case 2: // items
                 ItemController.openAddNewItemWindow();
                 btnItemReset_onAction(event);
                 break;
-            case 3:
+            case 3: // purchase order
                 PurchaseOrderController.openCreatePurchaseOrderWindow();
                 break;
-            default:
-                throw new AssertionError();
+
         }
 
     }
@@ -230,8 +239,13 @@ public class MainWindowController implements Initializable {
                     btnSupReset_onAction(event);
                 }
                 break;
-            default:
-                throw new AssertionError();
+            case 3:
+                if (tblOrders.getSelectionModel().getSelectedIndex() >= 0) {
+                    String pid = tblOrders.getSelectionModel().getSelectedItem().getId();
+                    PurchaseOrderController.openEditPurchaseOrder(pid);
+                    btnPOReset_onAction(event);
+                }
+
         }
     }
 
@@ -252,9 +266,9 @@ public class MainWindowController implements Initializable {
     }
 
     private void refreshItems() {
-        String txt = txtCusSearch.getText();
-        cusData.clear();
-        switch (cmbCusSelectedIndex) {
+        String txt = txtItmSearch.getText();
+        itmData.clear();
+        switch (cmbItmSelectedIndex) {
             case 0:
                 ItemController.refreshTable(this, ItemController.ItemColumns.ItemID, txt);
                 break;
@@ -386,11 +400,51 @@ public class MainWindowController implements Initializable {
     }
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Coding for Controll P Orders">
     @FXML
     private void btnPOReset_onAction(ActionEvent event) {
+        txtPOSearch.setText("");
+        refreshPOrders();
     }
 
-    //table details classes;
+    private void initPOrderTable() {
+        tblOrders.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        pOrderDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        pOrderID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        pOrderPaid.setCellValueFactory(new PropertyValueFactory<>("paid"));
+        pOrderSID.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
+        pOrderTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+    }
+
+    public void refreshPOrders() {
+        String arg = txtPOSearch.getText();
+        pOrderData.clear();
+        switch (cmbPOrderSelectedIndex) {
+            case 0:
+                PurchaseOrderController.refreshTable(this, true, arg);
+                break;
+            case 1:
+                PurchaseOrderController.refreshTable(this, false, arg);
+                break;
+        }
+    }
+
+    public void tblPOrderAddItem(String purchaseOrderID, String supplierID, double total, Date date, boolean paid) {
+        pOrderData.add(new POrderTableRow(purchaseOrderID, supplierID, date.toString(), paid, total));
+    }
+
+    public void tblPOrderSetItems() {
+        //tblOrders.getItems().clear();
+        tblOrders.getItems().setAll(pOrderData);
+    }
+
+    @FXML
+    private void txtpOrderSearch_Action(ActionEvent event) {
+        refreshPOrders();
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="table details classes">
     public class PersonTableRow {
 
         private final StringProperty id = new SimpleStringProperty("");
@@ -548,28 +602,90 @@ public class MainWindowController implements Initializable {
             this.date.set(date);
         }
 
-        public Double getQty() {
-            return qty.get();
+        public String getQty() {
+            return qty.get() == 0 ? "" : "" + qty.get();
         }
 
         public void setQty(Double qty) {
             this.qty.set(qty);
         }
 
-        public Double getLastPurchasePrice() {
-            return lastPurchasePrice.get();
+        public String getLastPurchasePrice() {
+            return lastPurchasePrice.get() == 0 ? "" : "" + lastPurchasePrice.get();
         }
 
         public void setLastPurchasePrice(Double lastPurchasePrice) {
             this.lastPurchasePrice.set(lastPurchasePrice);
         }
 
-        public Double getSellingPrice() {
-            return sellingPrice.get();
+        public String getSellingPrice() {
+            return sellingPrice.get() == 0 ? "" : "" + sellingPrice.get();
         }
 
         public void setSellingPrice(Double sellingPrice) {
             this.sellingPrice.set(sellingPrice);
         }
     }
+
+    public class POrderTableRow {
+
+        private final StringProperty id = new SimpleStringProperty("");
+        private final StringProperty supplierID = new SimpleStringProperty("");
+        private final StringProperty date = new SimpleStringProperty("");
+        private final BooleanProperty paid = new SimpleBooleanProperty(false);
+        private final DoubleProperty total = new SimpleDoubleProperty(0);
+
+        public POrderTableRow() {
+        }
+
+        public POrderTableRow(String id, String supID, String date, boolean paid, double total) {
+            setId(id);
+            setSupplierID(supID);
+            setPaid(paid);
+            setDate(date);
+            setTotal(total);
+        }
+
+        public void setDate(String date) {
+            this.date.set(date);
+        }
+
+        public void setId(String id) {
+            this.id.set(id);
+        }
+
+        public void setPaid(Boolean paid) {
+            this.paid.set(paid);
+        }
+
+        public void setSupplierID(String supplierID) {
+            this.supplierID.set(supplierID);
+        }
+
+        public void setTotal(Double total) {
+            this.total.set(total);
+        }
+
+        public String getDate() {
+            return date.get();
+        }
+
+        public String getId() {
+            return id.get();
+        }
+
+        public String getPaid() {
+            return paid.get() ? "Yes" : "No";
+        }
+
+        public String getSupplierID() {
+            return supplierID.get();
+        }
+
+        public Double getTotal() {
+            return total.get();
+        }
+
+    }
+//</editor-fold>
 }

@@ -29,7 +29,7 @@ public class LogController {
      * @param msg 
      */
     
-    public static void log(Level level, String msg){
+    public static void log(Level level, Object msg){
         logger.log(level, msg);
     }
 }
