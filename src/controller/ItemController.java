@@ -27,6 +27,7 @@ import view.items.FrmItemController;
 import view.orders.FrmPurchaseOrderController;
 import view.orders.FrmSaleOrderController;
 
+
 /**
  *
  * @author Malaka
@@ -101,6 +102,7 @@ public class ItemController {
         session.close();
 
         stage.showAndWait();
+
     }
 
     public static ArrayList<String> getAllUnits() {

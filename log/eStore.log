@@ -16,3 +16,13 @@
 2016 Jul 31 23:53:13,981 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.MappingException: Unknown entity: model.PurchaseOrder
 2016 Aug 01 07:46:06,144 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'I00004' for key 'UK_nc3iibx5x5qb865sd253a18jm'
 2016 Aug 01 07:46:06,177 [t=main] ERROR logger.LogController.log(:33) - org.hibernate.exception.ConstraintViolationException: could not execute statement
+2016 Aug 03 10:35:07,015 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - javafx.fxml.LoadException: 
+file:/C:/Users/Malaka/Documents/NetBeansProjects/eStore/dist/run1122423191/eStore.jar!/view/Select.fxml
+
+2016 Aug 03 10:35:35,650 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - javafx.fxml.LoadException: 
+file:/C:/Users/Malaka/Documents/NetBeansProjects/eStore/dist/run1122423191/eStore.jar!/view/Select.fxml
+
+2016 Aug 04 00:19:54,990 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - javax.persistence.PersistenceException: org.hibernate.PropertyValueException: not-null property references a null or transient value : model.PurchaseOrder.purchaseOrderID
+2016 Aug 04 00:20:28,152 [t=JavaFX Application Thread] ERROR logger.LogController.log(:33) - javax.persistence.PersistenceException: org.hibernate.PropertyValueException: not-null property references a null or transient value : model.PurchaseOrder.purchaseOrderID
+2016 Aug 04 09:24:36,556 [t=main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions(:131) - Duplicate entry 'P00020' for key 'UK_a9agfbfnuwc0f730mty772knn'
+2016 Aug 04 09:24:36,559 [t=main] ERROR logger.LogController.log(:33) - javax.persistence.PersistenceException: org.hibernate.exception.ConstraintViolationException: could not execute statement

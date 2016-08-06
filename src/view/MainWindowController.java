@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -132,22 +133,6 @@ public class MainWindowController implements Initializable {
     private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
     private ObservableList<ItemTableRow> itmData = FXCollections.observableArrayList();
     private ObservableList<POrderTableRow> pOrderData = FXCollections.observableArrayList();
-    @FXML
-    private ChoiceBox<?> cmbSOSearchItem;
-    @FXML
-    private TextField txtSOSearch;
-    @FXML
-    private TableView<?> tblSaleOrder;
-    @FXML
-    private TableColumn<?, ?> sOrderId;
-    @FXML
-    private TableColumn<?, ?> sOrderCustomerID;
-    @FXML
-    private TableColumn<?, ?> sOrderDate;
-    @FXML
-    private TableColumn<?, ?> sOrderPaid;
-    @FXML
-    private TableColumn<?, ?> sOrderTotal;
 
     /**
      * Initializes the controller class.
@@ -270,6 +255,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private void btnRemove_onClick(ActionEvent event) {
+
     }
 
 //<editor-fold defaultstate="collapsed" desc="Coding for Controll Items">
@@ -288,6 +274,7 @@ public class MainWindowController implements Initializable {
         String txt = txtItmSearch.getText();
         itmData.clear();
         switch (cmbItmSelectedIndex) {
+
             case 0:
                 ItemController.refreshTable(this, ItemController.ItemColumns.ItemID, txt);
                 break;
@@ -421,6 +408,7 @@ public class MainWindowController implements Initializable {
 
 //<editor-fold defaultstate="collapsed" desc="Coding for Controll P Orders">
     @FXML
+
     private void btnPOReset_onAction(ActionEvent event) {
         txtPOSearch.setText("");
         refreshPOrders();
@@ -468,6 +456,8 @@ public class MainWindowController implements Initializable {
     }
 
 //<editor-fold defaultstate="collapsed" desc="table details classes">
+    //table details classes;
+
     public class PersonTableRow {
 
         private final StringProperty id = new SimpleStringProperty("");
@@ -575,6 +565,7 @@ public class MainWindowController implements Initializable {
 
         public ItemTableRow(String id, String name, String scale, String lastSID, String date,
                 double qty, double lpp, double lsp) {
+            
             this.id.set(id);
             this.name.set(name);
             this.scale.set(scale);
@@ -625,6 +616,7 @@ public class MainWindowController implements Initializable {
             this.date.set(date);
         }
 
+
         public String getQty() {
             return qty.get() == 0 ? "" : "" + qty.get();
         }
@@ -632,6 +624,7 @@ public class MainWindowController implements Initializable {
         public void setQty(Double qty) {
             this.qty.set(qty);
         }
+
 
         public String getLastPurchasePrice() {
             return lastPurchasePrice.get() == 0 ? "" : "" + lastPurchasePrice.get();
