@@ -8,6 +8,7 @@ package view;
 import controller.CustomersController;
 import controller.ItemController;
 import controller.PurchaseOrderController;
+import controller.SalesOrderController;
 import controller.SupplierController;
 import java.net.URL;
 import java.util.ArrayList;
@@ -131,6 +132,22 @@ public class MainWindowController implements Initializable {
     private ObservableList<PersonTableRow> supData = FXCollections.observableArrayList();
     private ObservableList<ItemTableRow> itmData = FXCollections.observableArrayList();
     private ObservableList<POrderTableRow> pOrderData = FXCollections.observableArrayList();
+    @FXML
+    private ChoiceBox<?> cmbSOSearchItem;
+    @FXML
+    private TextField txtSOSearch;
+    @FXML
+    private TableView<?> tblSaleOrder;
+    @FXML
+    private TableColumn<?, ?> sOrderId;
+    @FXML
+    private TableColumn<?, ?> sOrderCustomerID;
+    @FXML
+    private TableColumn<?, ?> sOrderDate;
+    @FXML
+    private TableColumn<?, ?> sOrderPaid;
+    @FXML
+    private TableColumn<?, ?> sOrderTotal;
 
     /**
      * Initializes the controller class.
@@ -209,7 +226,9 @@ public class MainWindowController implements Initializable {
             case 3: // purchase order
                 PurchaseOrderController.openCreatePurchaseOrderWindow();
                 break;
-
+            case 4: // salling order
+                SalesOrderController.openCreateSalesOrderWindow();
+                break;
         }
 
     }
@@ -443,6 +462,10 @@ public class MainWindowController implements Initializable {
         refreshPOrders();
     }
 //</editor-fold>
+
+    @FXML
+    private void btnSOReset_onAction(ActionEvent event) {
+    }
 
 //<editor-fold defaultstate="collapsed" desc="table details classes">
     public class PersonTableRow {

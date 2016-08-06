@@ -125,8 +125,8 @@ public class PurchaseOrderController {
             try {
                 PurchaseOrderItem e = new PurchaseOrderItem();
 
-                Item item = (Item) session.createCriteria(Item.class
-                ).add(Restrictions.eq("itemID", id)).uniqueResult();
+                Item item = (Item) session.createCriteria(Item.class)
+                        .add(Restrictions.eq("itemID", id)).uniqueResult();
 
                 e.setItem(item);
                 try {

@@ -49,10 +49,17 @@ public class FrmCustomerController implements Initializable {
     private Label lblTitle;
 
     private boolean forEdit;
+    private boolean added;
+
+    public void setAdded(boolean added) {
+        this.added = added;
+    }
 
     /**
      * Initializes the controller class.
      */
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -137,10 +144,12 @@ public class FrmCustomerController implements Initializable {
                     if (!updateCustomer) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR, "Customer is not Updated Successfully","Error");
                         LogController.log(Level.ERROR, "Customer Updating is not done.");
+                        setAdded(false);
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Updated Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "Customer Updated - " + cId);
+                        setAdded(true);
                     }
                 } else {
                     // adding new customer
@@ -148,10 +157,12 @@ public class FrmCustomerController implements Initializable {
                     if (!saveCustomer) {
                         UICommonController.showAlertBox(Alert.AlertType.ERROR,  "Customer is not Saved Successfully","Error");
                         LogController.log(Level.ERROR, "Customer Saving is not done.");
+                        setAdded(false);
                     } else {
                         UICommonController.showAlertBox(Alert.AlertType.INFORMATION, "Customer is Saved Successfully", "");
                         ((Stage) btnSave.getScene().getWindow()).close();
                         LogController.log(Level.INFO, "New Customer Created - " + cId);
+                        setAdded(true);
                     }
                 }
         }
@@ -166,7 +177,12 @@ public class FrmCustomerController implements Initializable {
                 ButtonType.YES,ButtonType.NO);
         if (showAlertBox.get() == ButtonType.YES) {
             ((Stage) btnClose.getScene().getWindow()).close();
+            setAdded(false);
         }
+    }
+
+    public boolean isAdded() {
+        return added;
     }
 
 }

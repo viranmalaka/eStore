@@ -27,7 +27,7 @@ public class SaleOrderItem {
     private double qty;
     private double sellingPrice;
     private double total;
-    private float discount;
+    private double discount;
 
     public long getId() {
         return id;
@@ -73,11 +73,11 @@ public class SaleOrderItem {
         this.total = total;
     }
 
-    public float getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(float discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
     

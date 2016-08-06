@@ -7,6 +7,7 @@ package controller;
 import hibernate.HibernateController;
 import hibernate.SessionManager;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
@@ -24,6 +25,7 @@ import view.MainWindowController;
 import view.UICommonController;
 import view.items.FrmItemController;
 import view.orders.FrmPurchaseOrderController;
+import view.orders.FrmSaleOrderController;
 
 /**
  *
@@ -129,13 +131,12 @@ public class ItemController {
                     // null or empty list
                     get = null;
                 }
-                Object remainQty = session.createQuery("select sum(remainQty) from PurchaseOrderItem where item_id='" + item.getId()+ "'").uniqueResult();
-                
+                double remainQty = getRemainQty(item, session);
                 if (get != null) {
                     controller.tblItemAddItem(item.getItemID(),
                             item.getName(),
                             item.getScale().toString(),
-                            (double)(remainQty == null ? 0 : remainQty),
+                            remainQty,
                             get.getExpDate() == null ? "" : get.getExpDate().toString(),
                             get.getPurchasePrice(),
                             get.getLabeledSellingPrice(),
@@ -145,7 +146,7 @@ public class ItemController {
                     controller.tblItemAddItem(item.getItemID(),
                             item.getName(),
                             item.getScale().toString(),
-                            (double)(remainQty == null ? 0.0 : remainQty),
+                            remainQty,
                             "",
                             0,
                             0,
@@ -185,6 +186,42 @@ public class ItemController {
 
     public static boolean matchItemValues(String id, String name) {
         return getFilterdItem(ItemColumns.ItemID, id).get(0).getName().equals(name);
+    }
+
+    public static void setItemInSalesOrder(FrmSaleOrderController aThis, ItemColumns itemColumns, String text) {
+        List<Item> list = getFilterdItem(itemColumns, text);
+        if (list != null && !list.isEmpty()) {
+            Item get = list.get(0);
+            Session s = SessionManager.getInstance().getSessionFactory().openSession();
+            s.beginTransaction();
+
+            aThis.setItemValue(get.getItemID(),
+                    get.getName(),
+                    get.getScale().toString(),
+                    getRemainQty(get, s),
+                    (Date) getLastPOrderDetails(get, s)[0],
+                    (double) getLastPOrderDetails(get, s)[1]);
+        }
+    }
+
+    private static double getRemainQty(Item i, Session s) {
+        Object uniqueResult = s.createQuery("select sum(remainQty) from PurchaseOrderItem where item_id='" + i.getId() + "'").uniqueResult();
+        return uniqueResult == null ? 0.0 : (double) uniqueResult;
+    }
+
+    private static Object[] getLastPOrderDetails(Item i, Session s) {
+        List list = getPOIforItem(i, s);
+        if (list.isEmpty()) {
+            return new Object[]{null, 0.0};
+        }
+        PurchaseOrderItem p = (PurchaseOrderItem) list.get(0);
+        return new Object[]{p.getExpDate(), p.getPurchasePrice()};
+    }
+
+    public static List<PurchaseOrderItem> getPOIforItem(Item i, Session s) {
+        return  s.createQuery("FROM PurchaseOrderItem Where item_id=? AND remainQty > 0 ORDER BY id DESC")
+                .setLong(0, i.getId())
+                .list();
     }
 
     public static enum ItemColumns {

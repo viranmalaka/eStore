@@ -14,7 +14,7 @@
       <AppenderRef ref="Console"/>
       <AppenderRef ref="File" />
     </Root>   
-    <Logger name="org.logging.learn.log4j" level="error" additivity="false">
+    <Logger name="org.logging.learn.log4j" level="fatal" additivity="false">
       <AppenderRef ref="File" />
     </Logger>
   </Loggers>

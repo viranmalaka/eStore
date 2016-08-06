@@ -5,6 +5,7 @@
  */
 package view;
 
+import controller.CustomersController;
 import controller.ItemController;
 import controller.SupplierController;
 import java.net.URL;
@@ -32,6 +33,7 @@ import model.Customer;
 import model.Item;
 import model.Supplier;
 import view.orders.FrmPurchaseOrderController;
+import view.orders.FrmSaleOrderController;
 
 /**
  * FXML Controller class
@@ -55,7 +57,7 @@ public class SelectController implements Initializable {
     
     
     Class findingClass;
-    FrmPurchaseOrderController controller;
+    FrmControllerCommon controller;
     private boolean selected;
 
     public boolean isSelected() {
@@ -72,7 +74,7 @@ public class SelectController implements Initializable {
     }    
 
     
-    public void initData(FrmPurchaseOrderController controll, Class findingClass){
+    public void initData(FrmControllerCommon controll, Class findingClass){
         this.findingClass = findingClass;
         this.controller = controll;
         chbProperty.getItems().setAll(FXCollections.observableList(new ArrayList<String>() {{
@@ -110,7 +112,15 @@ public class SelectController implements Initializable {
             }
             list.getItems().setAll(data);
         }else if(findingClass == Customer.class){
-            
+            List<Customer> filterdCustomers = CustomersController.getFilterdCustomers(txtSearch.getText(), 
+                    chbProperty.getSelectionModel().getSelectedIndex()==0 ?
+                            CustomersController.PersonColumns.CustomerID : 
+                            CustomersController.PersonColumns.Name);
+            ObservableList<TableRaw> data = FXCollections.observableArrayList();
+            for (Customer filterdCustomer : filterdCustomers) {
+                data.add(new TableRaw(filterdCustomer.getCustomerID(), filterdCustomer.getFirstName() + " " + filterdCustomer.getLastName()));
+            }
+            list.getItems().setAll(data);
         }
     }
 
@@ -151,11 +161,11 @@ public class SelectController implements Initializable {
     
     private void setValue(String id){
         if (findingClass == Supplier.class) {
-            controller.setSupplierValues(id, "", "", "");
+            ((FrmPurchaseOrderController)controller).setSupplierValues(id, "", "", "");
         }else if(findingClass == Item.class){
             controller.setItemValue(id, "", "");
         }else if(findingClass == Item.class){
-            
+            ((FrmSaleOrderController)controller).setCustomerValue(id,"","","");
         }
     }
     

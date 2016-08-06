@@ -21,6 +21,7 @@ import org.hibernate.criterion.Restrictions;
 import view.MainWindowController;
 import view.UICommonController;
 import view.customers.FrmCustomerController;
+import view.orders.FrmSaleOrderController;
 
 /**
  *
@@ -64,17 +65,19 @@ public class CustomersController {
         return Long.parseLong(maxID + "") + 1;
     }
 
-    public static void openAddNewCustomerWindow() {
+    public static boolean openAddNewCustomerWindow() {
         String newCustomerId = CommonControllers.convertIndex(getNextIndex(), 'C');
-        
+
         FXMLLoader createFXML = UICommonController.getInstance().createFXML("customers/frmCustomer.fxml");
         Stage stage = UICommonController.getInstance().getStage(createFXML);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setTitle("Add New Customer");
-        ((FrmCustomerController)createFXML.getController()).initData(newCustomerId);
-        
+        ((FrmCustomerController) createFXML.getController()).initData(newCustomerId);
+
         stage.showAndWait();
+        
+        return ((FrmCustomerController)createFXML.getController()).isAdded();
     }
 
     public static void openEditCustomerWindow(String id) {
@@ -90,12 +93,12 @@ public class CustomersController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setTitle("Edit Customer");
-        ((FrmCustomerController)createFXML.getController()).initData(
-                        customer.getCustomerID(),
-                        customer.getFirstName(),
-                        customer.getLastName(),
-                        customer.getTelephone(),
-                        customer.getAddress());
+        ((FrmCustomerController) createFXML.getController()).initData(
+                customer.getCustomerID(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getTelephone(),
+                customer.getAddress());
         session.close();
         stage.showAndWait();
     }
@@ -162,7 +165,25 @@ public class CustomersController {
         }
         return res;
     }
-    
+
+    public static void setCusInSalesOrder(FrmSaleOrderController controller, PersonColumns column, String arg) {
+        List<Customer> list = getFilterdCustomers(arg, column);
+        if (list != null && !list.isEmpty()) {
+            Customer get = list.get(0);
+            controller.setCustomerValue(get.getCustomerID(),
+                    get.getFirstName() + " " + get.getLastName(),
+                    get.getAddress(),
+                    get.getTelephone());
+        }
+    }
+
+    public static boolean matchCustomerValues(String text, String text0) {
+        Customer get = getFilterdCustomers(text, PersonColumns.CustomerID).get(0);
+        if (text0.equals(get.getFirstName() + " " + get.getLastName())) {
+            return true;
+        }
+        return false;
+    }
 
     public static enum PersonColumns {
         CustomerID, Name, Address, Telephone
